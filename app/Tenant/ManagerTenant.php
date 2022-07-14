@@ -4,7 +4,7 @@ namespace App\Tenant;
 
 use App\Models\Tenant;
 
-class MenagerTenant
+class ManagerTenant
 {
     public function getTenantIdentify()
     {

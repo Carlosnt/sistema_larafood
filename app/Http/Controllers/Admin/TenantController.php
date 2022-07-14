@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TenantRequest;
 use App\Http\Requests\Admin\UserRequest;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Support\Cropper;
 
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-class UserController extends Controller
+class TenantController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,14 +25,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (!Auth()->user()->hasPermission('users')) {
+        if (!Auth()->user()->hasPermission('tenants')) {
             abort(403, 'Unauthorized');
         }
 
-        $users = User::latest()->tenantUser();
+        $tenants = Tenant::all();
 
-        return view('layouts.admin.users.index', [
-            'users' => $users
+        return view('layouts.admin.tenants.index', [
+            'tenants' => $tenants
         ]);
 
     }
@@ -83,8 +85,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::tenantUser()->where('id', $id)->first();
-        return response()->json($user);
+        $tenant = Tenant::with('plan')->where('id', $id)->first();
+        return response()->json($tenant);
     }
 
     /**
@@ -95,9 +97,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::tenantUser()->find($id);
-        return  view('layouts.admin.users.edit', [
-            'user'=> $user
+        $tenant = Tenant::where('id', $id)->first();
+        return  view('layouts.admin.tenants.edit', [
+            'tenant'=> $tenant
         ]);
     }
 
@@ -108,29 +110,31 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TenantRequest $request, $id)
     {
-        $userUpdate = User::tenantUser()->where("id", $id)->first();
+        $tenantUpdate = Tenant::where("id", $id)->first();
 
-        if(!empty($request->hasFile('image'))){
-            Storage::delete($userUpdate->image);
-            Cropper::flush($userUpdate->image);
-            $userUpdate->image = '';
-            $userUpdate->image = $request->file('image')->storeAs("users", Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('image')->extension());
-            $userUpdate->save();
+        if(!empty($request->hasFile('logo') && $request->logo->isValid())) {
+            if ($tenantUpdate->logo != null) {
+                Storage::delete($tenantUpdate->logo);
+                Cropper::flush($tenantUpdate->logo);
+            }
+            $tenantUpdate->logo = '';
+            $tenantUpdate->logo = $request->file('logo')->storeAs("tenants/{$tenantUpdate->uuid}/logo", Str::slug($request->company)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('logo')->extension());
+            $tenantUpdate->save();
         }
 
-        $userUpdate->fill($request->all());
+        $tenantUpdate->fill($request->all());
 
-        unset($userUpdate->image);
+        unset($tenantUpdate->logo);
 
-        if($userUpdate->save()){
-            $json['message'] = $this->message->success("Usuário atualizado com sucesso")->render();
-            $json['redirect'] = route('admin.users.index');
+        if($tenantUpdate->save()){
+            $json['message'] = $this->message->success("Empresa atualizada com sucesso")->render();
+            $json['redirect'] = route('admin.tenants.index');
             return response()->json($json);
         }else{
-            $json['message'] = $this->message->error("Erro ao atualizar o usuário")->render();
-            $json['redirect'] = route('admin.users.edit',$userUpdate->id);
+            $json['message'] = $this->message->error("Erro ao atualizar a empresa")->render();
+            $json['redirect'] = route('admin.tenants.edit',$tenantUpdate->id);
             return response()->json($json);
         }
     }

@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Perfis')
+@section('pageTitle', 'Usuários')
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Perfis</h4>
+                        <h4 class="mb-sm-0">Usuários</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.profiles.create') }}">novo perfil</a></li>
-                                <li class="breadcrumb-item active">Perfis</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.users.create') }}">novo usuário</a></li>
+                                <li class="breadcrumb-item active">Usuários</li>
                             </ol>
                         </div>
 
@@ -28,16 +28,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de perfis</h4>
+                            <h4 class="card-title">Gerênciamento de usuários</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os perfis do sistema
+                                        Aqui você pode cadastrar, editar e deletar os usuários do sistema
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.profiles.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo perfil</a>
+                                <a href="{{ route('admin.users.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo usuário</a>
                             </div>
                             </div>
 
@@ -48,28 +48,33 @@
                                         <table class="table activate-select dt-responsive nowrap w-100" id="dataTablePlans">
                                             <thead>
                                             <tr>
+                                                <th align="left">Imagem:</th>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Descrição:</th>
+                                                <th align="center">Email:</th>
+                                                <th align="center">Empresa:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($profiles)
-                                                @foreach($profiles as $profile)
+                                            @if($users)
+                                                @foreach($users as $user)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $profile->name }}</td>
-                                                        <td>{{ $profile->description }}</td>
+                                                        <td><img class="d-flex me-3 rounded-circle img-thumbnail avatar-xs" src="{{ $user->url_image }}"></td>
+                                                        <td class="sorting_1 dtr-control">{{ $user->name }}</td>
+
+                                                        <td>{{ $user->email }}</td>
+                                                        <td>{{ $user->tenant->company }}</td>
                                                         <td>
-                                                            <a href="{{ route('admin.profiles.show', $profile->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
-                                                            <a href="{{ route('admin.profiles.edit',$profile->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
-                                                            <a href="{{ route('admin.profiles.permissions',$profile->id) }}" class="btn btn-sm btn-success"><i class="ri-lock-2-fill"></i> Permissões</a>
+                                                            <a href="{{ route('admin.users.show', $user->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.users.edit',$user->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.users.roles',$user->id) }}" class="btn btn-sm btn-success"><i class="ri-lock-2-fill"></i> Cargos</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.profiles.delete', $profile->id) }}"
+                                                               data-url="{{ route('admin.users.destroy', $user->id) }}"
                                                                data-method="DELETE"
-                                                               data-name="{{ $profile->name }}"
-                                                               data-id="{{ $profile->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
+                                                               data-name="{{ $user->name }}"
+                                                               data-id="{{ $user->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -142,7 +147,9 @@
                                     '<div class="modal-body">\n' +
                                     '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.name + '</span></p>\n' +
                                     '<ul>\n' +
-                                    '<li>'+response.description+'</li>\n'+
+                                    '<li><b>Nome: </b>'+response.name+'</li>\n'+
+                                    '<li><b>E-mail: </b>'+response.email+'</li>\n'+
+                                    '<li><b>Último login: </b>'+response.last_login_at+'</li>\n'+
                                     '</ul>\n'+
                                     '</div>\n' +
 

@@ -52,14 +52,14 @@ $(function () {
 
     function notificationHtml(link, image, notify, date) {
         return '<div data-notificationlink="' + link + '" class="notification_center_item radius transition">\n' +
-                '    <div class="image">\n' +
-                '        <img class="rounded" src="' + image + '"/>\n' +
-                '    </div>\n' +
-                '    <div class="info">\n' +
-                '        <p class="title">' + notify + '</p>\n' +
-                '        <p class="time icon-clock-o">' + date + '</p>\n' +
-                '    </div>\n' +
-                '</div>';
+            '    <div class="image">\n' +
+            '        <img class="rounded" src="' + image + '"/>\n' +
+            '    </div>\n' +
+            '    <div class="info">\n' +
+            '        <p class="title">' + notify + '</p>\n' +
+            '        <p class="time icon-clock-o">' + date + '</p>\n' +
+            '    </div>\n' +
+            '</div>';
     }
 
     notificationsCount();
@@ -136,6 +136,7 @@ $(function () {
                     $.each(response.responseJSON.errors, function (prefix, val) {
                         $('span.' + prefix + '_error').text(val[0]);
                     });
+                    load.fadeOut(200).css("display", "none");
                 } else {
                     clicked.reset();
                     if (response.message) {
@@ -145,14 +146,20 @@ $(function () {
 
                 //redirect
                 if (response.redirect) {
-                    window.location.href = response.redirect;
+                    setTimeout(function () {
+                        window.location.href = response.redirect;
+                        load.fadeOut();
+                    }, 3000);
                 } else {
                     load.fadeOut(200);
                 }
 
                 //reload
                 if (response.reload) {
-                    window.location.reload();
+                    setTimeout(function () {
+                        window.location.reload();
+                        load.fadeOut();
+                    }, 3000);
                 } else {
                     load.fadeOut(200);
                 }
@@ -163,11 +170,12 @@ $(function () {
                     $(".modal-dialog").fadeOut("fast", function () {
                         $(".modal").fadeOut("fast");
                     });
-                   if(response.error == true){
-                       setTimeout(function () {
-                        window.location.reload();
-                    }, 3000);
-                   }
+                    if (response.error == true) {
+                        setTimeout(function () {
+                            window.location.reload();
+                            load.fadeOut();
+                        }, 3000);
+                    }
                     setTimeout(function () {
                         window.location.reload();
                     }, 3000);
@@ -202,8 +210,6 @@ $(function () {
             beforeSend: function () {
                 load.fadeIn(200).css("display", "flex");
                 $(document).find('span.text-danger').text('');
-
-
             },
             uploadProgress: function (event, position, total, completed) {
                 var loaded = completed;
@@ -217,7 +223,10 @@ $(function () {
             success: function (response) {
                 //redirect
                 if (response.redirect) {
-                    window.location.href = response.redirect;
+                    setTimeout(function (){
+                        window.location.href = response.redirect;
+                    },3000);
+
                     ajaxMessage(response.message, ajaxResponseBaseTime);
                 } else {
                     form.find("input[type='file']").val(null);
@@ -226,22 +235,34 @@ $(function () {
 
                 //reload
                 if (response.reload) {
-                    window.location.reload();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3000);
+                } else {
+                    load.fadeOut(200);
+                }
+
+                //reload e message
+                if (response.reload && response.message) {
+                    ajaxMessage(response.message, ajaxResponseBaseTime);
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3000);
                 } else {
                     load.fadeOut(200);
                 }
 
                 //message
                 if (response.message) {
-                   ajaxMessage(response.message, ajaxResponseBaseTime);
+                    ajaxMessage(response.message, ajaxResponseBaseTime);
                     $(".modal-dialog").fadeOut("fast", function () {
-                        $(".modal").fadeOut("fast");
+                        $(".modal-backdrop").fadeOut("fast");
                     });
-                   if(response.error == true){
-                       setTimeout(function () {
-                        window.location.reload();
-                    }, 3000);
-                   }
+                    if (response.error == true) {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
+                    }
                     setTimeout(function () {
                         window.location.reload();
                     }, 3000);
@@ -263,10 +284,12 @@ $(function () {
                     $.each(data.responseJSON.errors, function (prefix, val) {
                         $('span.' + prefix + '_error').text(val[0]);
                     });
+                    load.fadeOut();
                 } else {
                     if (data.message) {
                         ajaxMessage(data.message, ajaxResponseBaseTime);
                     }
+                    load.fadeOut();
                 }
                 ajaxMessage(ajaxResponseRequestError, 5);
                 load.fadeOut();
@@ -274,74 +297,99 @@ $(function () {
         });
     });
 
-    //DELETE ajax
-    $(".j_delete_item").click(function (e) {
+    //Preenche dados da janela modal de exclusão
+    $(".j_delete_modal").click(function (e) {
         e.preventDefault();
+        var effecttime = 200;
+        var clicked = $(this);
+        var data = clicked.data();
+        $(".modal-dialog").html("");
+        var modal = clicked.data("modal-dialog");
+        var modal = "";
+        let html =
+                    '<div class="modal-content">\n' +
+                        '<div class="modal-header">\n' +
+                            '<h5 class="modal-title" id="staticBackdropLabel">Janela de exclusão</h5>\n' +
+                                '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' +
+                        '</div>\n' +
+                        '<div id="form_delete_modal">\n' +
+                            '<div class="modal-body">\n' +
+                                '<p>Deseja realmete deletar o registro: <span id="name_modal" style="font-weight: bold">' + data.name + '</span></p>\n' +
+                            '</div>\n' +
 
+                            '<div class="modal-footer justify-content-center">\n' +
+                                '<button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Cancelar</button>\n' +
+                                '<a href="'+data.url+'" data-url="'+data.url+'" data-method="'+data.method+'" class="btn btn-success waves-effect waves-light j_delete_item">Sim</a>\n' +
+                            '</div>\n' +
+                        '</div>\n' +
+                    '</div>';
+
+
+        $(".modal-dialog").append(html);
+        $(".modal-dialog").fadeIn(effecttime).css("display", "flex");
+        $(modal).fadeIn(effecttime);
+
+    });
+
+
+
+    //DELETE ITEM AJAX
+    $(document).on("click", ".j_delete_item", function (e) {
+        e.preventDefault();
         var clicked = $(this);
         var data = clicked.data();
         var load = $(".ajax_load");
 
         $.ajax({
             url: clicked.attr('href'),
-            type: "DELETE",
+            type: clicked.data('method'),
             data: data,
             dataType: "json",
             beforeSend: function () {
                 load.fadeIn(200).css("display", "flex");
-                $(document).find('span.text-danger').text('');
             },
             success: function (response) {
+                //message
+                if (response.message) {
+                    $(".modal-dialog").fadeOut("fast", function () {
+                        $(".modal-backdrop").fadeOut("fast");
+                        $(".modal").fadeOut("fast");
+                        load.fadeOut("fast").css("display", "none");
+                    });
+                    setTimeout(function () {
+                        window.location.href = response.redirect;
+                    }, 3000);
+                    ajaxMessage(response.message, ajaxResponseBaseTime);
 
-                $("#especialidade_delete").find('input[name="id"]').val(response.id);
-                $("#especialidade_delete").find('input[name="especialidade"]').val(response.especialidade);
-                document.getElementById('especialidade_update_form').action= clicked.attr('data-url');
+                }
 
-                $("#especialidade_delete").modal("show");
                 //redirect
                 if (response.redirect) {
-                    window.location.href = response.redirect;
+                    setTimeout(function () {
+                        window.location.href = response.redirect;
+                    }, 3000);
+
                 } else {
                     load.fadeOut(200);
                 }
 
                 //reload
                 if (response.reload) {
-                    window.location.reload();
-                } else {
-                    load.fadeOut(200);
-                }
-
-                //message
-                if (response.message) {
-                    ajaxMessage(response.message, ajaxResponseBaseTime);
-                    $(".modal-dialog").fadeOut("fast", function () {
-                        $(".modal").fadeOut("fast");
-                    });
-                   if(response.error == true){
-                       setTimeout(function () {
-                        window.location.reload();
-                    }, 3000);
-                   }
                     setTimeout(function () {
                         window.location.reload();
                     }, 3000);
-
+                } else {
+                    load.fadeOut(200);
                 }
             },
             error: function (data) {
-                $.each(data.responseJSON.errors, function (prefix, val) {
-                    $('span.' + prefix + '_error').text(val[0]);
-                });
-
                 ajaxMessage(ajaxResponseRequestError, 5);
                 load.fadeOut();
-
             }
         });
     });
 
-    $(document).on("click", ".j_modal_edit", function(e){
+    $(document).on("click", ".j_modal_edit", function (e) {
         e.preventDefault();
         var clicked = $(this);
         var data = clicked.data();
@@ -358,7 +406,7 @@ $(function () {
             success: function (response) {
                 $("#especialidade_update").find('input[name="id"]').val(response.id);
                 $("#especialidade_update").find('input[name="especialidade"]').val(response.especialidade);
-                document.getElementById('especialidade_update_form').action= clicked.attr('data-url');
+                document.getElementById('especialidade_update_form').action = clicked.attr('data-url');
 
                 $("#especialidade_update").modal("show");
             },
@@ -374,7 +422,7 @@ $(function () {
         });
     });
 
-    $(".j_select_delete_item").on("click",  function(e){
+    $(".j_select_delete_item").on("click", function (e) {
         e.preventDefault();
         var clicked = $(this);
         $('#delete_modal').find('a').attr('href', clicked.attr('data-url'));
@@ -426,6 +474,7 @@ $(function () {
 
     // AJAX RESPONSE MONITOR
     var ajaxResponseBaseTime = 3;
+
     function ajaxMessage(message, time) {
         var ajaxMessage = $(message);
 
@@ -448,8 +497,7 @@ $(function () {
         $(this).effect("bounce").fadeOut(1);
     });
 
-    // MAKS
-
+    // MASK
     $(".mask-date").mask('00/00/0000');
     $(".mask-datetime").mask('00/00/0000 00:00');
     $(".mask-month").mask('00/0000', {reverse: true});

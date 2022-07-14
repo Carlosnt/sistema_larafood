@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Dashboard  - Categorias')
+@section('pageTitle', 'Dashboard  - Produtos')
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Categorias</h4>
+                        <h4 class="mb-sm-0">Produtos</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.categories.create') }}">Nova categoria</a></li>
-                                <li class="breadcrumb-item active">Categorias</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.products.create') }}">Novo produto</a></li>
+                                <li class="breadcrumb-item active">Produtos</li>
                             </ol>
                         </div>
 
@@ -28,16 +28,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Categorias</h4>
+                            <h4 class="card-title">Gerênciamento de Produtos</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os categorias do sistema
+                                        Aqui você pode cadastrar, editar e deletar os produtos do sistema
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.categories.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Nova categoria</a>
+                                <a href="{{ route('admin.products.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo produto</a>
                             </div>
                             </div>
 
@@ -49,28 +49,29 @@
                                             <thead>
                                             <tr>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Descrição:</th>
-                                                <th align="center">Empresa:</th>
+                                                <th align="left">imagem:</th>
+                                                <th align="center">preço:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($categories)
-                                                @foreach($categories as $category)
+                                            @if($products)
+                                                @foreach($products as $product)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $category->name }}</td>
-                                                        <td>{{ \Illuminate\Support\Str::limit($category->description,40,'...') }}</td>
-                                                        <td>{{ $category->tenant->company }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $product->title }}</td>
+                                                        <td><img class="d-flex me-3 rounded-circle img-thumbnail avatar-xs" src="{{ $product->url_image }}"></td>
+                                                        <td>{{ $product->price }}</td>
                                                         <td>
-                                                            <a href="{{ route('admin.categories.show', $category->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
-                                                            <a href="{{ route('admin.categories.edit',$category->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.products.show', $product->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.products.categories', $product->id) }}" class="btn btn-sm btn-success"><i class="ri-price-tag-3-line"></i> Add Categoria</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.categories.destroy', $category->id) }}"
+                                                               data-url="{{ route('admin.products.destroy', $product->id) }}"
                                                                data-method="DELETE"
-                                                               data-name="{{ $category->name }}"
-                                                               data-id="{{ $category->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
+                                                               data-name="{{ $product->title }}"
+                                                               data-id="{{ $product->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -141,9 +142,10 @@
                                     '</div>\n' +
                                     '<div id="form_delete_modal">\n' +
                                     '<div class="modal-body">\n' +
-                                    '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.name + '</span></p>\n' +
+                                    '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.title + '</span></p>\n' +
                                     '<ul>\n' +
-                                    '<li><b>Nome: </b>'+response.name+'</li>\n'+
+                                    '<li><b>Nome: </b>'+response.title+'</li>\n'+
+                                    '<li><b>Preço: </b>'+response.price+'</li>\n'+
                                     '<li><b>Descrição: </b>'+response.description+'</li>\n'+
                                     '</ul>\n'+
                                     '</div>\n' +

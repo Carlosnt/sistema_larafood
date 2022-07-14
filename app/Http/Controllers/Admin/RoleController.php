@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ProfileRequest;
-use App\Models\Profile;
+use App\Http\Requests\Admin\RoleRequest;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,9 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profiles = Profile::all();
-        return view('layouts.admin.profiles.index', [
-            'profiles' => $profiles
+        $roles = Role::all();
+        return view('layouts.admin.roles.index', [
+            'roles' => $roles
         ]);
     }
 
@@ -29,7 +29,7 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        return view('layouts.admin.profiles.create');
+        return view('layouts.admin.roles.create');
     }
 
     /**
@@ -38,16 +38,16 @@ class ProfileController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProfileRequest $request)
+    public function store(RoleRequest $request)
     {
-        $createProfile = Profile::create($request->all());
-        if ($createProfile) {
-            $json['message'] = $this->message->success("Perfil cadastrado com sucesso")->render();
-            $json['redirect'] = route('admin.profiles.index');
+        $createRoles = Role::create($request->all());
+        if ($createRoles) {
+            $json['message'] = $this->message->success("Permissão cadastrada com sucesso")->render();
+            $json['redirect'] = route('admin.roles.index');
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->error("Erro ao cadastrar o perfil")->render();
-            $json['redirect'] = route('admin.profiles.create');
+            $json['message'] = $this->message->error("Erro ao cadastrar a permissão")->render();
+            $json['redirect'] = route('admin.roles.create');
             return response()->json($json);
         }
     }
@@ -60,8 +60,8 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        $profile = Profile::where('id', $id)->first();
-        return response()->json($profile);
+        $role = Role::where('id', $id)->first();
+        return response()->json($role);
     }
 
     /**
@@ -72,9 +72,9 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        $profile = Profile::where('id', $id)->first();
-        return view('layouts.admin.profiles.edit', [
-            'profile' => $profile
+        $role = Role::where('id', $id)->first();
+        return view('layouts.admin.roles.edit', [
+            'role' => $role
         ]);
     }
 
@@ -85,41 +85,21 @@ class ProfileController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProfileRequest $request, $id)
+    public function update(RoleRequest $request, $id)
     {
-        $profileUpdate = Profile::where("id", $id)->first();
+        $RolesUpdate = Role::where("id", $id)->first();
 
-        $profileUpdate->fill($request->all());
+        $RolesUpdate->fill($request->all());
 
-        if (!$profileUpdate->save()) {
-            $json['message'] = $this->message->warning("Erro ao atualizado o perfil")->render();
+        if (!$RolesUpdate->save()) {
+            $json['message'] = $this->message->warning("Erro ao atualizado o cargo")->render();
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->success("Plano perfil com sucesso")->render();
+            $json['message'] = $this->message->success("Cargo com sucesso")->render();
             return response()->json($json);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id)
-    {
-        $deleted = Profile::where('id', $id)->first();
-        if ($deleted->delete()) {
-            $json['message'] = $this->message->success("Perfil deletado com sucesso")->render();
-            $json['redirect'] = route('admin.profiles.index');
-            return response()->json($json);
-        } else {
-            $json['message'] = $this->message->error("Oppps! Erro ao deletar o perfil")->render();
-            $json['redirect'] = route('admin.profiles.index');
-            return response()->json($json);
-        }
-
-    }
 
     /**
      * Search filter
@@ -128,15 +108,15 @@ class ProfileController extends Controller
      */
     public function search(Request $request)
     {
-        $profiles = Profile::where(function ($query) use ($request){
+        $roles = Role::where(function ($query) use ($request){
             if($request->filter){
                 $query->where('name', $request->filter)
                       ->orWhere('description', 'LIKE', "%{$request->filter}%");
             }
         })->get();
 
-        return view('layouts.admin.profiles.index', [
-            'profiles' => $profiles
+        return view('layouts.admin.roles.index', [
+            'roles' => $roles
         ]);
     }
 
@@ -148,6 +128,15 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Role::where('id', $id)->first();
+        if ($deleted->delete()) {
+            $json['message'] = $this->message->success("Cargo deletado com sucesso")->render();
+            $json['redirect'] = route('admin.roles.index');
+            return response()->json($json);
+        } else {
+            $json['message'] = $this->message->error("Oppps! Erro ao deletar o cargo")->render();
+            $json['redirect'] = route('admin.roles.index');
+            return response()->json($json);
+        }
     }
 }

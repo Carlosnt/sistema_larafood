@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Planos')
+@section('pageTitle', 'Perfis')
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Planos</h4>
+                        <h4 class="mb-sm-0">Perfis</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('plans.create') }}">novo plano</a></li>
-                                <li class="breadcrumb-item active">Planos</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.profiles.create') }}">novo perfil</a></li>
+                                <li class="breadcrumb-item active">Perfis</li>
                             </ol>
                         </div>
 
@@ -28,18 +28,19 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de planos</h4>
+                            <h4 class="card-title">Gerênciamento de perfis</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os planos do sistema
+                                        Aqui você pode cadastrar, editar e deletar os perfis do sistema
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('plans.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo plano</a>
+                                <a href="{{ route('admin.profiles.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo perfil</a>
                             </div>
                             </div>
+
                             <div id="selection-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 
                                 <div class="row">
@@ -48,28 +49,27 @@
                                             <thead>
                                             <tr>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Preço:</th>
                                                 <th align="center">Descrição:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($plans)
-                                                @foreach($plans as $plan)
+                                            @if($profiles)
+                                                @foreach($profiles as $profile)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $plan->name }}</td>
-                                                        <td>{{ $plan->price }}</td>
-                                                        <td>{{ $plan->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $profile->name }}</td>
+                                                        <td>{{ $profile->description }}</td>
                                                         <td>
-                                                            <a href="{{ route('details.plan.index',$plan->url) }}" class="btn btn-sm btn-success">Add detalhes</a>
-                                                            <a href="{{ route('plans.edit',$plan->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                                                            <a href="{{ route('admin.profiles.show', $profile->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.profiles.edit',$profile->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.profiles.permissions',$profile->id) }}" class="btn btn-sm btn-success"><i class="ri-lock-2-fill"></i> Permissões</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('plans.delete',['plan' => $plan->id]) }}"
-                                                               data-action="DELETE"
-                                                               data-name="{{ $plan->name }}"
-                                                               data-id="{{ $plan->id }}">Deletar</a>
+                                                               data-url="{{ route('admin.profiles.delete', $profile->id) }}"
+                                                               data-method="DELETE"
+                                                               data-name="{{ $profile->name }}"
+                                                               data-id="{{ $profile->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -90,10 +90,77 @@
             <div class="modal-dialog" role="document">
             </div>
         </div>
+        <!--  Modal content for the above example -->
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="modalInfo" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 @endsection
 @section('js')
             <script>
                 $(function () {
+                    //Preenche dados da janela modal de informações
+                    $(".j_info_modal").click(function (e) {
+                        e.preventDefault();
+
+                        var clicked = $(this);
+                        var data = clicked.data();
+                        $(".modal-dialog").html("");
+                        var modal = clicked.data("modal-dialog");
+                        var modal = "";
+                        $.ajax({
+                            url: clicked.attr('href'),
+                            type: clicked.data('method'),
+                            data: data,
+                            dataType: "json",
+                            success: function (response) {
+                                //message
+                                if (response.error) {
+                                    ajaxMessage(response.message, ajaxResponseBaseTime);
+                                    $(".modal-dialog").fadeOut("fast", function () {
+                                        $(".modal").fadeOut("fast");
+                                    });
+                                    if (response.error == true) {
+                                        setTimeout(function () {
+                                            window.location.reload();
+                                            load.fadeOut();
+                                        }, 3000);
+                                    }
+                                    setTimeout(function () {
+                                        window.location.reload();
+                                    }, 3000);
+                                }
+                                let html =
+                                    '<div class="modal-content">\n' +
+                                    '<div class="modal-header">\n' +
+                                    '<h5 class="modal-title" id="staticBackdropLabel">Janela de detalhes</h5>\n' +
+                                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\n' +
+                                    '</div>\n' +
+                                    '<div id="form_delete_modal">\n' +
+                                    '<div class="modal-body">\n' +
+                                    '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.name + '</span></p>\n' +
+                                    '<ul>\n' +
+                                    '<li>'+response.description+'</li>\n'+
+                                    '</ul>\n'+
+                                    '</div>\n' +
+
+                                    '<div class="modal-footer justify-content-center">\n' +
+                                    '<button type="button" class="btn btn-danger waves-effect" data-bs-dismiss="modal">Fechar</button>\n' +
+                                    '</div>\n' +
+                                    '</div>\n' +
+                                    '</div>';
+
+
+                                $(".modal-dialog").append(html);
+                                $(".modal-dialog").fadeIn(effecttime).css("display", "flex");
+                                $(modal).fadeIn(effecttime);
+
+                            },
+                        });
+                    });
+
                 // DATATABLES
                     $('#dataTablePlans').DataTable({
                         responsive: true,

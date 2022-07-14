@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Editar perfil')
+@section('pageTitle', 'Dashboard - Editar Cargo')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Editar perfil</h4>
+                        <h4 class="mb-sm-0">Editar Cargo</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.profiles.index') }}">Perfis</a></li>
-                                <li class="breadcrumb-item active">Editar perfil</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Cargos</a></li>
+                                <li class="breadcrumb-item active">Editar Cargo</li>
                             </ol>
                         </div>
 
@@ -26,19 +26,19 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Editar o perfil <b>{{ $profile->name }}</b></h4>
+                            <h4 class="card-title">Editar o Cargo <b>{{ $role->name }}</b></h4>
                             <p class="card-title-desc">Por favor, preencha todos os campos requiridos abaixo.</p>
-                            <form method="POST" action="{{ route('admin.profiles.update', $profile->id) }}"
+                            <form method="POST" action="{{ route('admin.roles.update', $role->id) }}"
                                   class="app_form" autocomplete="off">
                                 @method('PUT')
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $profile->id }}">
+                                <input type="hidden" name="id" value="{{ $role->id }}">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Nome</label>
                                             <input type="text" name="name" class="form-control" id="name"
-                                                   placeholder="Nome do plano" value="{{ $profile->name }}">
+                                                   placeholder="Nome do plano" value="{{ $role->name }}">
                                             <span class="text-danger name_error"></span>
                                         </div>
                                     </div>
@@ -48,7 +48,7 @@
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Descrição</label>
                                         <textarea class="form-select" id="description" name="description"
-                                                  rows="4">{{ $profile->description }}</textarea>
+                                                  rows="4">{{ $role->description }}</textarea>
 
                                     </div>
                                 </div>

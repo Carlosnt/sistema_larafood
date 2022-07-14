@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões disponíveis '.$profile->name)
+@section('pageTitle', 'Perfis do '.$plan->name)
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões disponíveis para o perfil <b class="text-danger">{{ $profile->name }}</b></h4>
+                        <h4 class="mb-sm-0">Perfis disponíveis para o plano <b class="text-danger">{{ $plan->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('permissions.create') }}">Nova permissão</a></li>
-                                <li class="breadcrumb-item active">Permissões</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.profiles.create') }}">Novo perfil</a></li>
+                                <li class="breadcrumb-item active">Perfis</li>
                             </ol>
                         </div>
 
@@ -28,11 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Permissões</h4>
+                            <h4 class="card-title">Gerênciamento de Perfis</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode ver as permissões disponíveis
+                                        Aqui você pode ver as perfis disponíveis
                                     </p>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                            <form action="{{ route('profiles.permissions.available', $profile->id) }}" class="ajax_off" method="POST" autocomplete="off">
+                                            <form action="{{ route('admin.plans.profiles.available', $plan->id) }}" class="ajax_off" method="POST" autocomplete="off">
                                                 @csrf
                                                 <div class="row">
                                                 <div class="col-md-10">
@@ -62,15 +62,15 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <form action="{{ route('profiles.permissions.attach', $profile->id) }}" method="POST">
+                                           <form action="{{ route('admin.plans.profiles.attach', $plan->id) }}" method="POST">
                                                @csrf
-                                               @if($permissions)
-                                                   @foreach($permissions as $permission)
+                                               @if($profiles)
+                                                   @foreach($profiles as $profile)
                                                        <tr class="odd">
                                                            <td class="sorting_1 dtr-control">
-                                                               <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" /></td>
-                                                           <td>{{ $permission->name }}</td>
-                                                           <td>{{ $permission->description }}</td>
+                                                               <input type="checkbox" name="profiles[]" value="{{ $profile->id }}" /></td>
+                                                           <td>{{ $profile->name }}</td>
+                                                           <td>{{ $profile->description }}</td>
                                                        </tr>
                                                    @endforeach
                                                    <tr>

@@ -3,96 +3,96 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class PermissionRoleController extends Controller
+class UserRoleController extends Controller
 {
-    public function permissions($role_id)
+    public function roles($user_id)
     {
-        $role = Role::with('permissions')->find($role_id);
+        $user = User::find($user_id);
+
+        if(!$user){
+            return redirect()->back();
+        }
+
+        $roles = $user->roles()->get();
+
+        return view('layouts.admin.users.roles.index', [
+            'roles' => $roles,
+            'user' => $user
+        ]);
+    }
+
+    public function users($user_id)
+    {
+        $role = Role::find($user_id);
 
         if(!$role){
             return redirect()->back();
         }
 
-        $permissions = $role->permissions()->get();
+        $users = $role->users()->get();
 
-        return view('layouts.admin.roles.permissions.index', [
-            'role' => $role,
-            'permissions' => $permissions
+        return view('layouts.admin.roles.users.index', [
+            'users' => $users,
+            'role' => $role
         ]);
     }
 
-    public function roles($permission_id)
+    public function rolesAvailable(Request $request, $user)
     {
-        $permission = Permission::find($permission_id);
-
-        if(!$permission){
-            return redirect()->back();
-        }
-
-        $roles = $permission->roles()->get();
-
-        return view('layouts.admin.roles.permissions.index', [
-            'roles' => $roles,
-            'permission' => $permission
-        ]);
-    }
-
-    public function permissionsAvailable(Request $request, $role)
-    {
-        $role = Role::where('id',$role)->first();
+        $user = User::where('id',$user)->first();
         $filters = $request->except('_token');
 
-        if(!$role){
+        if(!$user){
             return redirect()->back();
         }
 
-        $permissions = $role->permissionsAvailable($request->filter);
-        return view('layouts.admin.roles.permissions.available', [
-            'role' => $role,
-            'permissions' => $permissions,
+        $roles = $user->rolesAvailable($request->filter);
+        return view('layouts.admin.users.roles.available', [
+            'user' => $user,
+            'roles' => $roles,
             'filters' => $filters
         ]);
     }
 
-    public function attachPermissionsRole(Request $request, $role)
+    public function attachRoleUser(Request $request, $user_id)
     {
-        $role = Role::where('id',$role)->first();
-        if(!$role){
+        $user = User::where('id', $user_id)->first();
+        if(!$user){
             return redirect()->back();
         }
 
         $data = (object) $request->all();
-        if(!isset($data->permissions) || count($data->permissions) == 0){
-            $json['message'] = $this->message->warning("Selecione pelo menos uma permissão para fazer a vinculação")->render();
+        if(!isset($data->roles) || count($data->roles) == 0){
+            $json['message'] = $this->message->warning("Selecione pelo menos um cargo para fazer a vinculação")->render();
             $json['reload'] = true;
             return response()->json($json);
         }else{
-            $role->permissions()->attach($data->permissions);
-            $json['message'] = $this->message->success("Permissões adicionadas com sucesso")->render();
-            $json['redirect'] = route('admin.roles.permissions',$role->id);
+            $user->roles()->attach($data->roles);
+            $json['message'] = $this->message->success("Cargo adicionadas com sucesso")->render();
+            $json['redirect'] = route('admin.users.roles',$user->id);
             return response()->json($json);
         }
 
     }
 
-    public function detachPermissionsRole($role, $permission)
+    public function detachRoleUser($user_id, $role_id)
     {
-        $role = Role::find($role);
-        $permission = Permission::find($permission);
+        $user = User::find($user_id);
+        $role = Role::find($role_id);
 
-        if(!$role || !$permission){
-            $json['message'] = $this->message->warning("Oppps! Perfil ou permissão não encontrado!")->render();
-            $json['redirect'] = route('admin.roles.permissions', $role->id);
+        if(!$user || !$role){
+            $json['message'] = $this->message->warning("Oppps! Usuário ou cargo não encontrado!")->render();
+            $json['redirect'] = route('admin.users.roles', $user->id);
             return response()->json($json);
 
         }else{
-            $role->permissions()->detach($permission);
-            $json['message'] = $this->message->success("Permissão do do cargo {$role->name} deletado com sucesso!")->render();
-            $json['redirect'] = route('admin.roles.permissions',$role->id);
+            $user->roles()->detach($role);
+            $json['message'] = $this->message->success("Cargo do usuário {$user->name} deletado com sucesso!")->render();
+            $json['redirect'] = route('admin.users.roles',$user->id);
             return response()->json($json);
         }
     }

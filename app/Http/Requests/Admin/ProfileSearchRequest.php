@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileRequest extends FormRequest
+class ProfileSearchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:profiles,name,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:profiles,name'),
-            'description' => 'nullable|min:3|max:255'
+            'filter' => 'nullable'
         ];
     }
 }

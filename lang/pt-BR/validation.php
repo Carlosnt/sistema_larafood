@@ -184,7 +184,7 @@ return [
         'year' => 'ano',
 
         // Person
-        'document' => 'CPF',
+        'document' => 'documento',
         'document_secondary' => 'RG',
         'document_secondary_complement' => 'órgão expedidor',
         'date_of_birth' => 'data de nascimento',
@@ -217,6 +217,7 @@ return [
         'spouse_company_work' => 'empresa do cônjuge',
 
         // Company
+        'company' => 'empresa',
         'social_name' => 'razão social',
         'alias_name' => 'nome fantasia',
         'document_company' => 'CNPJ',
@@ -240,6 +241,8 @@ return [
         'garage_covered' => 'garagem coberta',
         'area_total' => 'área total',
         'area_util' => 'área útil',
+        'price' => 'preço',
+        'identify' => 'identificador',
     ],
 
 ];

@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões disponíveis '.$profile->name)
+@section('pageTitle', 'Permissões disponíveis '.$role->name)
 @section('content')
 
 
@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões disponíveis para o perfil <b class="text-danger">{{ $profile->name }}</b></h4>
+                        <h4 class="mb-sm-0">Permissões disponíveis para o cargo <b class="text-danger">{{ $role->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -41,7 +41,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                            <form action="{{ route('admin.profiles.permissions.available', $profile->id) }}" class="ajax_off" method="POST" autocomplete="off">
+                                            <form action="{{ route('admin.roles.permissions.available', $role->id) }}" class="ajax_off" method="POST" autocomplete="off">
                                                 @csrf
                                                 <div class="row">
                                                 <div class="col-md-10">
@@ -62,7 +62,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <form action="{{ route('admin.profiles.permissions.attach', $profile->id) }}" method="POST">
+                                           <form action="{{ route('admin.roles.permissions.attach', $role->id) }}" method="POST">
                                                @csrf
                                                @if($permissions)
                                                    @foreach($permissions as $permission)

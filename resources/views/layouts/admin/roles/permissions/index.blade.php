@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões')
+@section('pageTitle', 'Dashboard - Cargos para a permissão')
 @section('content')
 
 
@@ -10,12 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões para o peril <b class="text-danger">{{ $profile->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.permissions.create') }}">Nova permissão</a></li>
-                                <li class="breadcrumb-item active">Permissões</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.create') }}">Nova Regra</a></li>
+                                <li class="breadcrumb-item active">Regras</li>
                             </ol>
                         </div>
 
@@ -28,16 +27,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Permissões</h4>
+                            <h4 class="card-title">Gerênciamento de Regras</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar e deletar as permissões para <b class="text-danger">{{ $profile->name }}</b>
+                                        Aqui você pode cadastrar e deletar as Regras para <b class="text-danger">{{ $role->name }}</b>
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.profiles.permissions.available',$profile->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add permissão</a>
+                                <a href="{{ route('admin.roles.permissions.available',$role->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add permissão</a>
                             </div>
                             </div>
 
@@ -63,7 +62,7 @@
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.profiles.permissions.detach', [$profile->id, $permission->id]) }}"
+                                                               data-url="{{ route('admin.roles.permissions.detach', [$role->id, $permission->id]) }}"
                                                                data-method="POST"
                                                                data-name="{{ $permission->name }}"
                                                                data-id="{{ $permission->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>

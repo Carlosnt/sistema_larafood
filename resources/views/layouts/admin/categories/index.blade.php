@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Usuários')
+@section('pageTitle', 'Dashboard  - Categorias')
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Usuários</h4>
+                        <h4 class="mb-sm-0">Categorias</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.users.create') }}">novo usuário</a></li>
-                                <li class="breadcrumb-item active">Usuários</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.categories.create') }}">Nova categoria</a></li>
+                                <li class="breadcrumb-item active">Categorias</li>
                             </ol>
                         </div>
 
@@ -28,16 +28,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de usuários</h4>
+                            <h4 class="card-title">Gerênciamento de Categorias</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os usuários do sistema
+                                        Aqui você pode cadastrar, editar e deletar os categorias do sistema
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.users.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo usuário</a>
+                                <a href="{{ route('admin.categories.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Nova categoria</a>
                             </div>
                             </div>
 
@@ -49,28 +49,28 @@
                                             <thead>
                                             <tr>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Email:</th>
+                                                <th align="center">Descrição:</th>
                                                 <th align="center">Empresa:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($users)
-                                                @foreach($users as $user)
+                                            @if($categories)
+                                                @foreach($categories as $category)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $user->name }}</td>
-                                                        <td>{{ $user->email }}</td>
-                                                        <td>{{ $user->tenant->company }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $category->name }}</td>
+                                                        <td>{{ \Illuminate\Support\Str::limit($category->description,40,'...') }}</td>
+                                                        <td>{{ $category->tenant->company }}</td>
                                                         <td>
-                                                            <a href="{{ route('admin.users.show', $user->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
-                                                            <a href="{{ route('admin.users.edit',$user->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.categories.show', $category->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.categories.edit',$category->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.users.destroy', $user->id) }}"
+                                                               data-url="{{ route('admin.categories.destroy', $category->id) }}"
                                                                data-method="DELETE"
-                                                               data-name="{{ $user->name }}"
-                                                               data-id="{{ $user->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
+                                                               data-name="{{ $category->name }}"
+                                                               data-id="{{ $category->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -144,8 +144,7 @@
                                     '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.name + '</span></p>\n' +
                                     '<ul>\n' +
                                     '<li><b>Nome: </b>'+response.name+'</li>\n'+
-                                    '<li><b>E-mail: </b>'+response.email+'</li>\n'+
-                                    '<li><b>Último login: </b>'+response.last_login_at+'</li>\n'+
+                                    '<li><b>Descrição: </b>'+response.description+'</li>\n'+
                                     '</ul>\n'+
                                     '</div>\n' +
 

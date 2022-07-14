@@ -1,98 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Planos</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('web/assets/css/style.css') }}.css">
-</head>
-<body>
-
-<div class="demo">
-    <div class="container">
+@extends('layouts.web.master.app')
+@section('pageTitle', 'Home')
+@section('content')
         <div class="text-center">
             <h1 class="title-plan">Escolha o plano</h1>
         </div>
-        <div class="row">
-            <div class="col-md-4 col-sm-6">
-                <div class="pricingTable">
-                    <div class="pricing-content">
-                        <div class="pricingTable-header">
-                            <h3 class="title">Free</h3>
-                        </div>
-                        <div class="inner-content">
-                            <div class="price-value">
-                                <span class="currency">R$</span>
-                                <span class="amount">0,00</span>
-                                <span class="duration">Por Mês</span>
-                            </div>
-                            <ul>
-                                <li>Categorias</li>
-                                <li>Produtos</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pricingTable-signup">
-                        <a href="#">Assinar</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="pricingTable">
-                    <div class="pricing-content">
-                        <div class="pricingTable-header">
-                            <h3 class="title">Premium</h3>
-                        </div>
-                        <div class="inner-content">
-                            <div class="price-value">
-                                <span class="currency">R$</span>
-                                <span class="amount">199,99</span>
-                                <span class="duration">Por Mês</span>
-                            </div>
-                            <ul>
-                                <li>Categorias</li>
-                                <li>Produtos</li>
-                                <li>Mesas</li>
-                                <li>Cardápio</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pricingTable-signup">
-                        <a href="#">Assinar</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="pricingTable">
-                    <div class="pricing-content">
-                        <div class="pricingTable-header">
-                            <h3 class="title">Business</h3>
-                        </div>
-                        <div class="inner-content">
-                            <div class="price-value">
-                                <span class="currency">R$</span>
-                                <span class="amount">499,99</span>
-                                <span class="duration">Por Mês</span>
-                            </div>
-                            <ul>
-                                <li>Categorias</li>
-                                <li>Produtos</li>
-                                <li>Mesas</li>
-                                <li>Cardápio</li>
-                                <li>Suporte</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pricingTable-signup">
-                        <a href="#">Assinar</a>
-                    </div>
-                </div>
-            </div><!--end-->
-        </div>
-    </div>
-</div>
 
-</body>
-</html>
+        <div class="row">
+            <div class="col-md-12">
+
+                    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                        @auth
+                            <a href="{{ url('admin/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                        @else
+                            <a href="{{ route('admin.login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                            @endif
+                        @endauth
+                    </div>
+
+            </div>
+            @if($plans)
+            @foreach($plans as $plan)
+            <div class="col-md-4 col-sm-6">
+                <div class="pricingTable">
+                    <div class="pricing-content">
+                        <div class="pricingTable-header">
+                            <h3 class="title">{{__($plan->name)}}</h3>
+                        </div>
+                        <div class="inner-content">
+                            <div class="price-value">
+                                <span class="currency">R$</span>
+                                <span class="amount">{{ $plan->price }}</span>
+                                <span class="duration">Por Mês</span>
+                            </div>
+                            <ul>
+                                @foreach($plan->details as $detail)
+                                    <li>{{ __($detail->name) }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable-signup">
+                        <a href="{{ route('web.plan.subscription',$plan->url) }}">Assinar</a>
+                    </div>
+                </div>
+            </div>
+                @endforeach
+                @endif
+
+
+        </div>
+@endsection

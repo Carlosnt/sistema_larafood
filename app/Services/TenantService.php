@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use App\Models\Plan;
 use Illuminate\Support\Facades\Hash;
@@ -16,20 +16,19 @@ class TenantService
         $this->plan = $plan;
         $this->data = $data;
 
-        $tenant = $this->createTenant();
+        $tenant = $this->storeTenant();
         $user = $this->storeUser($tenant);
 
         return $user;
     }
 
-    public function createTenant(arra $data)
+    public function storeTenant()
     {
         $data = $this->data;
         return $this->plan->tenants()->create([
             'document' => $data['document'],
             'company' => $data['company'],
             'email' => $data['email'],
-            'url' => Str::slug($data['company']),
             'subscription' => now(),
             'expired_at' => now()->addDays(7)
             ]);

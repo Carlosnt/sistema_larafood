@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões</h4>
+                        <h4 class="mb-sm-0">Permissões para o peril <b class="text-danger">{{ $profile->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('permissions.create') }}">Nova permissão</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.permissions.create') }}">Nova permissão</a></li>
                                 <li class="breadcrumb-item active">Permissões</li>
                             </ol>
                         </div>
@@ -32,35 +32,15 @@
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar as permissões do sistema
+                                        Aqui você pode cadastrar e deletar as permissões para <b class="text-danger">{{ $profile->name }}</b>
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('permissions.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo permissão</a>
+                                <a href="{{ route('admin.profiles.permissions.available',$profile->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add permissão</a>
                             </div>
                             </div>
-{{--                            <div class="col-md-12">--}}
-{{--                                <form action="{{ route('profiles.search') }}" method="POST" autocomplete="off">--}}
-{{--                                    <div class="row">--}}
-{{--                                        @csrf--}}
-{{--                                        <div class="col-md-10">--}}
-{{--                                            <div class="mb-3">--}}
-{{--                                                <label for="search" class="form-label">Pesquisar</label>--}}
-{{--                                                <input type="text" name="filter" class="form-control" id="search"--}}
-{{--                                                       placeholder="Pesquisar aqui...">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="col-md-2">--}}
-{{--                                            <div class="mb-3">--}}
-{{--                                                <label for="search" class="form-label">Click abaixo</label>--}}
-{{--                                            <button class="btn btn-primary" type="submit">Pesquisar</button>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
 
-{{--                                </form>--}}
-{{--                            </div>--}}
                             <div id="selection-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 
                                 <div class="row">
@@ -80,15 +60,13 @@
                                                         <td class="sorting_1 dtr-control">{{ $permission->name }}</td>
                                                         <td>{{ $permission->description }}</td>
                                                         <td>
-                                                            <a href="{{ route('permissions.show',$permission->id) }}" class="btn btn-sm btn-success">Add detalhes</a>
-                                                            <a href="{{ route('permissions.edit',$permission->id) }}" class="btn btn-sm btn-warning">Editar</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('permissions.delete', $permission->id) }}"
-                                                               data-action="DELETE"
+                                                               data-url="{{ route('admin.profiles.permissions.detach', [$profile->id, $permission->id]) }}"
+                                                               data-method="POST"
                                                                data-name="{{ $permission->name }}"
-                                                               data-id="{{ $permission->id }}">Deletar</a>
+                                                               data-id="{{ $permission->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

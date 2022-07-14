@@ -4,28 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
-use App\Models\Profile;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
-class ProfilePermissionController extends Controller
+class PermissionRoleController extends Controller
 {
-    public function permissions($profile_id)
+    public function permissions($role_id)
     {
-        $profile = Profile::with('permissions')->find($profile_id);
+        $role = Role::with('permissions')->find($role_id);
 
-        if(!$profile){
+        if(!$role){
             return redirect()->back();
         }
 
-        $permissions = $profile->permissions;
+        $permissions = $role->permissions()->get();
 
-        return view('layouts.admin.profiles.permissions.index', [
-            'profile' => $profile,
+        return view('layouts.admin.roles.permissions.index', [
+            'role' => $role,
             'permissions' => $permissions
         ]);
     }
 
-    public function profiles($permission_id)
+    public function roles($permission_id)
     {
         $permission = Permission::find($permission_id);
 
@@ -33,35 +33,35 @@ class ProfilePermissionController extends Controller
             return redirect()->back();
         }
 
-        $profiles = $permission->profiles()->get();
+        $roles = $permission->roles()->get();
 
-        return view('layouts.admin.permissions.profiles.profiles', [
-            'profiles' => $profiles,
+        return view('layouts.admin.roles.permissions.index', [
+            'roles' => $roles,
             'permission' => $permission
         ]);
     }
 
-    public function permissionsAvailable(Request $request, $profile)
+    public function permissionsAvailable(Request $request, $role)
     {
-        $profile = Profile::where('id',$profile)->first();
+        $role = Role::where('id',$role)->first();
         $filters = $request->except('_token');
 
-        if(!$profile){
+        if(!$role){
             return redirect()->back();
         }
 
-        $permissions = $profile->permissionsAvailable($request->filter);
-        return view('layouts.admin.profiles.permissions.available', [
-            'profile' => $profile,
+        $permissions = $role->permissionsAvailable($request->filter);
+        return view('layouts.admin.roles.permissions.available', [
+            'role' => $role,
             'permissions' => $permissions,
             'filters' => $filters
         ]);
     }
 
-    public function attachPermissionsProfile(Request $request, $profile)
+    public function attachPermissionsRole(Request $request, $role)
     {
-        $profile = Profile::where('id',$profile)->first();
-        if(!$profile){
+        $role = Role::where('id',$role)->first();
+        if(!$role){
             return redirect()->back();
         }
 
@@ -71,28 +71,28 @@ class ProfilePermissionController extends Controller
             $json['reload'] = true;
             return response()->json($json);
         }else{
-            $profile->permissions()->attach($data->permissions);
+            $role->permissions()->attach($data->permissions);
             $json['message'] = $this->message->success("Permissões adicionadas com sucesso")->render();
-            $json['redirect'] = route('admin.profiles.permissions',$profile->id);
+            $json['redirect'] = route('admin.roles.permissions',$role->id);
             return response()->json($json);
         }
 
     }
 
-    public function detachPermissionsProfile($profile, $permission)
+    public function detachPermissionsRole($role, $permission)
     {
-        $profile = Profile::find($profile);
+        $role = Role::find($role);
         $permission = Permission::find($permission);
 
-        if(!$profile || !$permission){
+        if(!$role || !$permission){
             $json['message'] = $this->message->warning("Oppps! Perfil ou permissão não encontrado!")->render();
-            $json['redirect'] = route('admin.profiles.permissions', $profile->id);
+            $json['redirect'] = route('admin.roles.permissions', $role->id);
             return response()->json($json);
 
         }else{
-            $profile->permissions()->detach($permission);
-            $json['message'] = $this->message->success("Permissão do perfil {$profile->name} deletado com sucesso!")->render();
-            $json['redirect'] = route('admin.profiles.permissions',$profile->id);
+            $role->permissions()->detach($permission);
+            $json['message'] = $this->message->success("Permissão do do cargo {$role->name} deletado com sucesso!")->render();
+            $json['redirect'] = route('admin.roles.permissions',$role->id);
             return response()->json($json);
         }
     }

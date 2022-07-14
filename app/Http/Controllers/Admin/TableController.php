@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CategoryRequest;
-use App\Models\Category;
+use App\Http\Requests\Admin\TableRequest;
+use App\Models\table;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class TableController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('layouts.admin.categories.index', [
-            'categories' => $categories
+        $tables = Table::all();
+        return view('layouts.admin.tables.index', [
+            'tables' => $tables
         ]);
     }
 
@@ -29,7 +29,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('layouts.admin.categories.create');
+        return view('layouts.admin.tables.create');
     }
 
     /**
@@ -38,18 +38,17 @@ class CategoryController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(TableRequest $request)
     {
-        $categoryCreated = Category::create($request->all());
+        $tableCreated = table::create($request->all());
 
-        if ($categoryCreated) {
-            $categoryCreated->setSlug();
-            $json['message'] = $this->message->success("Categoria cadastrado com sucesso")->render();
-            $json['redirect'] = route('admin.categories.index');
+        if ($tableCreated) {
+            $json['message'] = $this->message->success("Mesa cadastrado com sucesso")->render();
+            $json['redirect'] = route('admin.tables.index');
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->error("Erro ao cadastrar a categoria")->render();
-            $json['redirect'] = route('admin.categories.create');
+            $json['message'] = $this->message->error("Erro ao cadastrar a mesa")->render();
+            $json['redirect'] = route('admin.tables.create');
             return response()->json($json);
         }
     }
@@ -60,15 +59,15 @@ class CategoryController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Table $table)
     {
-        $category = Category::find($category->id);
+        $table = Table::find($table->id);
 
-        if(empty($category)){
+        if(empty($table)){
             return redirect()->back();
         }
 
-        return response()->json($category);
+        return response()->json($table);
     }
 
     /**
@@ -79,14 +78,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
+        $table = Table::find($id);
 
-        if(empty($category)){
+        if(empty($table)){
             return redirect()->back();
         }
 
-        return view('layouts.admin.categories.edit', [
-            'category' => $category
+        return view('layouts.admin.tables.edit', [
+            'table' => $table
         ]);
     }
 
@@ -97,49 +96,22 @@ class CategoryController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(TableRequest $request, $id)
     {
-        $categoryUpdate = Category::where("id", $id)->first();
+        $tableUpdate = Table::where("id", $id)->first();
 
-        if(empty($categoryUpdate)){
+        if(empty($tableUpdate)){
             return redirect()->back();
         }
 
-        $categoryUpdate->fill($request->all());
-        $categoryUpdate->setSlug();
-        if (!$categoryUpdate->save()) {
-            $json['message'] = $this->message->warning("Erro ao atualizado a categoria")->render();
+        $tableUpdate->fill($request->all());
+        if (!$tableUpdate->save()) {
+            $json['message'] = $this->message->warning("Erro ao atualizado a mesa")->render();
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->success("Categoria atualizada com sucesso")->render();
+            $json['message'] = $this->message->success("Mesa atualizada com sucesso")->render();
             return response()->json($json);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id)
-    {
-        $deleted = Category::where('id', $id)->first();
-
-        if(empty($deleted)){
-            return redirect()->back();
-        }
-
-        if ($deleted->delete()) {
-            $json['message'] = $this->message->success("Categoria deletada com sucesso")->render();
-            $json['redirect'] = route('admin.categories.index');
-            return response()->json($json);
-        } else {
-            $json['message'] = $this->message->error("Oppps! Erro ao deletar o plano")->render();
-            $json['redirect'] = route('admin.plans.index');
-            return response()->json($json);
-        }
-
     }
 
     /**
@@ -150,6 +122,20 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Table::where('id', $id)->first();
+
+        if(empty($deleted)){
+            return redirect()->back();
+        }
+
+        if ($deleted->delete()) {
+            $json['message'] = $this->message->success("Mesa deletada com sucesso")->render();
+            $json['redirect'] = route('admin.tables.index');
+            return response()->json($json);
+        } else {
+            $json['message'] = $this->message->error("Oppps! Erro ao deletar a mesa")->render();
+            $json['redirect'] = route('admin.tables.index');
+            return response()->json($json);
+        }
     }
 }

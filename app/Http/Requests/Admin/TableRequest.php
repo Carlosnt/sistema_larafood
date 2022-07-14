@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class TableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:categories,name,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:categories,name'),
-            'description' => 'required|min:3|max:10000'
+            'identify' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:tables,identify,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:tables,identify'),
+            'description' => 'required|min:3|max:191'
         ];
     }
 }

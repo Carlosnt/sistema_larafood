@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CategoryRequest;
-use App\Models\Category;
+use App\Http\Requests\Admin\ProductRequest;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Support\Cropper;
 
-class CategoryController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +19,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('layouts.admin.categories.index', [
-            'categories' => $categories
+        $products = Product::all();
+        return view('layouts.admin.products.index', [
+            'products' => $products
         ]);
     }
 
@@ -29,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('layouts.admin.categories.create');
+        return view('layouts.admin.products.create');
     }
 
     /**
@@ -38,18 +41,24 @@ class CategoryController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(ProductRequest $request)
     {
-        $categoryCreated = Category::create($request->all());
+        $data = $request->all();
 
-        if ($categoryCreated) {
-            $categoryCreated->setSlug();
-            $json['message'] = $this->message->success("Categoria cadastrado com sucesso")->render();
-            $json['redirect'] = route('admin.categories.index');
+        $tenant = auth()->user()->tenant;
+        if(!empty($request->file('image') && $request->image->isValid())){
+            $data['image'] = $request->file('image')->storeAs("tenants/{$tenant->uuid}/products", Str::slug($request->title)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('image')->extension());
+        }
+
+        $productCreated = Product::create($data);
+
+        if ($productCreated) {
+            $json['message'] = $this->message->success("Produto cadastrado com sucesso")->render();
+            $json['redirect'] = route('admin.products.index');
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->error("Erro ao cadastrar a categoria")->render();
-            $json['redirect'] = route('admin.categories.create');
+            $json['message'] = $this->message->error("Erro ao cadastrar o produto")->render();
+            $json['redirect'] = route('admin.products.create');
             return response()->json($json);
         }
     }
@@ -60,15 +69,15 @@ class CategoryController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Product $product)
     {
-        $category = Category::find($category->id);
+        $product = Product::find($product->id);
 
-        if(empty($category)){
+        if(empty($product)){
             return redirect()->back();
         }
 
-        return response()->json($category);
+        return response()->json($product);
     }
 
     /**
@@ -79,14 +88,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
+        $product = Product::find($id);
 
-        if(empty($category)){
+        if(empty($product)){
             return redirect()->back();
         }
 
-        return view('layouts.admin.categories.edit', [
-            'category' => $category
+        return view('layouts.admin.products.edit', [
+            'product' => $product
         ]);
     }
 
@@ -97,50 +106,37 @@ class CategoryController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $categoryUpdate = Category::where("id", $id)->first();
+        $productUpdate = Product::where("id", $id)->first();
 
-        if(empty($categoryUpdate)){
+        if(empty($productUpdate)){
             return redirect()->back();
         }
 
-        $categoryUpdate->fill($request->all());
-        $categoryUpdate->setSlug();
-        if (!$categoryUpdate->save()) {
-            $json['message'] = $this->message->warning("Erro ao atualizado a categoria")->render();
+        $tenant = auth()->user()->tenant;
+
+        if(!empty($request->hasFile('image'))){
+            Storage::delete($productUpdate->image);
+            Cropper::flush($productUpdate->image);
+            $productUpdate->image = '';
+            $productUpdate->image = $request->file('image')->storeAs("tenants/{$tenant->uuid}/products", Str::slug($request->title)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('image')->extension());
+            $productUpdate->save();
+        }
+
+        $productUpdate->fill($request->all());
+
+        unset($productUpdate->image);
+
+        if(!$productUpdate->save()) {
+            $json['message'] = $this->message->warning("Erro ao atualizar o produto")->render();
             return response()->json($json);
         } else {
-            $json['message'] = $this->message->success("Categoria atualizada com sucesso")->render();
+            $json['message'] = $this->message->success("Produto atualizado com sucesso")->render();
             return response()->json($json);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id)
-    {
-        $deleted = Category::where('id', $id)->first();
-
-        if(empty($deleted)){
-            return redirect()->back();
-        }
-
-        if ($deleted->delete()) {
-            $json['message'] = $this->message->success("Categoria deletada com sucesso")->render();
-            $json['redirect'] = route('admin.categories.index');
-            return response()->json($json);
-        } else {
-            $json['message'] = $this->message->error("Oppps! Erro ao deletar o plano")->render();
-            $json['redirect'] = route('admin.plans.index');
-            return response()->json($json);
-        }
-
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -150,6 +146,22 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = Product::where('id', $id)->first();
+
+        if(empty($deleted)){
+            return redirect()->back();
+        }
+
+        if ($deleted->delete()) {
+            Storage::delete($deleted->image);
+            Cropper::flush($deleted->image);
+            $json['message'] = $this->message->success("Produto deletado com sucesso")->render();
+            $json['redirect'] = route('admin.products.index');
+            return response()->json($json);
+        } else {
+            $json['message'] = $this->message->error("Oppps! Erro ao deletar o produto")->render();
+            $json['redirect'] = route('admin.products.index');
+            return response()->json($json);
+        }
     }
 }

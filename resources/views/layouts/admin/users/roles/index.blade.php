@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Dashboard - Cargos para a permissão')
+@section('pageTitle', 'Dashboard - Cargos do usuário')
 @section('content')
 
 
@@ -13,8 +13,8 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.create') }}">Nova Regra</a></li>
-                                <li class="breadcrumb-item active">Regras</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.create') }}">Novo Cargo</a></li>
+                                <li class="breadcrumb-item active">Cargos</li>
                             </ol>
                         </div>
 
@@ -27,16 +27,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Regras</h4>
+                            <h4 class="card-title">Gerênciamento de cargos</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar e deletar as Regras para <b class="text-danger">{{ $role->name }}</b>
+                                        Aqui você pode cadastrar e deletar os cargos para usuário <b class="text-danger">{{ $user->name }}</b>
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.roles.permissions.available',$role->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add permissão</a>
+                                <a href="{{ route('admin.users.roles.available',$user->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add cargo</a>
                             </div>
                             </div>
 
@@ -53,19 +53,19 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($permissions)
-                                                @foreach($permissions as $permission)
+                                            @if($roles)
+                                                @foreach($roles as $role)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $permission->name }}</td>
-                                                        <td>{{ $permission->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $role->name }}</td>
+                                                        <td>{{ $role->description }}</td>
                                                         <td>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.roles.permissions.detach', [$role->id, $permission->id]) }}"
+                                                               data-url="{{ route('admin.users.roles.detach', [$role->id, $role->id]) }}"
                                                                data-method="POST"
-                                                               data-name="{{ $permission->name }}"
-                                                               data-id="{{ $permission->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
+                                                               data-name="{{ $role->name }}"
+                                                               data-id="{{ $role->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

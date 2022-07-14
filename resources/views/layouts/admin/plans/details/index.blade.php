@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Planos')
+@section('pageTitle', 'Detalhes do planos')
 @section('content')
 
 
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Planos</h4>
+                        <h4 class="mb-sm-0">Detalhes do planos {{ $plan->name }}</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('plans.create') }}">novo plano</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.plans.create') }}">novo plano</a></li>
                                 <li class="breadcrumb-item active">Planos</li>
                             </ol>
                         </div>
@@ -28,16 +28,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de planos</h4>
+                            <h4 class="card-title">Gerênciamento de detalhes dos planos</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os planos do sistema
+                                        Aqui você pode visualizar todos detalhes para o plano <b class="text-danger">{{ $plan->name }}</b>
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('plans.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo plano</a>
+                                <a href="{{ route('admin.details.plan.create',[$plan->url]) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo detalhe do plano</a>
                             </div>
                             </div>
                             <div id="selection-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -48,28 +48,25 @@
                                             <thead>
                                             <tr>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Preço:</th>
-                                                <th align="center">Descrição:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($plans)
-                                                @foreach($plans as $plan)
+                                            @if($details)
+                                                @foreach($details as $detail)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $plan->name }}</td>
-                                                        <td>{{ $plan->price }}</td>
-                                                        <td>{{ $plan->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $detail->name }}</td>
+                                                        <td>{{ $detail->price }}</td>
+                                                        <td>{{ $detail->description }}</td>
                                                         <td>
-                                                            <a href="{{ route('details.plan.index',$plan->id) }}" class="btn btn-sm btn-success">Add detalhes</a>
-                                                            <a href="{{ route('plans.edit',$plan->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                                                            <a href="{{ route('admin.details.plan.edit',[$plan->url, $detail->id]) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('plans.delete',['plan' => $plan->id]) }}"
-                                                               data-action="DELETE"
-                                                               data-name="{{ $plan->name }}"
-                                                               data-id="{{ $plan->id }}">Deletar</a>
+                                                               data-url="{{ route('admin.details.plan.delete', [ $plan->url, $detail->id]) }}"
+                                                               data-method="DELETE"
+                                                               data-name="{{ $detail->name }}"
+                                                               data-id="{{ $detail->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

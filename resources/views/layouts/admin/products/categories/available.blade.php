@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Perfis do '.$plan->name)
+@section('pageTitle', 'Nova categoria para o '.$product->title)
 @section('content')
 
 
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Perfis disponíveis para o plano <b class="text-danger">{{ $plan->name }}</b></h4>
+                        <h4 class="mb-sm-0">Perfis disponíveis para o plano <b class="text-danger">{{ $product->title }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('profiles.create') }}">Novo perfil</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.categories.create') }}">Nova Cateoria</a></li>
                                 <li class="breadcrumb-item active">Perfis</li>
                             </ol>
                         </div>
@@ -28,11 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Perfis</h4>
+                            <h4 class="card-title">Gerênciamento de Categorias</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode ver as perfis disponíveis
+                                        Aqui você pode ver as categorias disponíveis
                                     </p>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                            <form action="{{ route('plans.profiles.available', $plan->id) }}" class="ajax_off" method="POST" autocomplete="off">
+                                            <form action="{{ route('admin.products.categories.available', $product->id) }}" class="ajax_off" method="POST" autocomplete="off">
                                                 @csrf
                                                 <div class="row">
                                                 <div class="col-md-10">
@@ -62,20 +62,20 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <form action="{{ route('plans.profiles.attach', $plan->id) }}" method="POST">
+                                           <form action="{{ route('admin.products.categories.attach', $product->id) }}" method="POST">
                                                @csrf
-                                               @if($profiles)
-                                                   @foreach($profiles as $profile)
+                                               @if($categories)
+                                                   @foreach($categories as $category)
                                                        <tr class="odd">
                                                            <td class="sorting_1 dtr-control">
-                                                               <input type="checkbox" name="profiles[]" value="{{ $profile->id }}" /></td>
-                                                           <td>{{ $profile->name }}</td>
-                                                           <td>{{ $profile->description }}</td>
+                                                               <input type="checkbox" name="categories[]" value="{{ $category->id }}" /></td>
+                                                           <td>{{ $category->name }}</td>
+                                                           <td>{{ $category->description }}</td>
                                                        </tr>
                                                    @endforeach
                                                    <tr>
                                                        <td>
-                                                           <input type="submit" class="btn btn-success" value="Vincular ao perfil">
+                                                           <input type="submit" class="btn btn-success" value="Vincular ao produto">
                                                        </td>
                                                    </tr>
                                                @endif

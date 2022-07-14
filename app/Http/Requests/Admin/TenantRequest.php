@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class TenantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,20 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => ['required','string','min:3', 'max:255'],
-            'email' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:users,email,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:users,email'),
-            'password' => 'required|min:6|max:16|confirmed|different:old_password',
-            'password_confirmation' => 'required|min:6|max:16',
+            'company' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:tenants,company,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:tenants,company'),
+            'email' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:tenants,email,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:tenants,email'),
+            'document' => (!empty($this->request->all()['id']) ? 'required||unique:tenants,document,' . $this->request->all()['id'] : 'required|unique:tenants,document'),
+            'logo' => 'required|image',
+            'active' => 'required|in:Y,N',
+
+            //subscription
+            'subscription' => 'nullable|date',
+            'expires_at' => 'nullable|date',
+            'subscription_id' => 'nullable|max:255',
+            'subscription_active' => 'nullable|boolean',
+            'subscription_suspended' => 'nullable|boolean',
         ];
 
-        if($this->method() == 'PUT'){
-            $rules['password'] = 'nullable|string|min:6|max:16|confirmed|different:old_password';
-            $rules['password_confirmation'] = 'required|min:6';
-        }
         return $rules;
     }
 

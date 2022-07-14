@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões disponíveis')
+@section('pageTitle', 'Permissões disponíveis '.$profile->name)
 @section('content')
 
 
@@ -10,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões disponíveis para o perfil {{ $profile->name }}</h4>
+                        <h4 class="mb-sm-0">Permissões disponíveis para o perfil <b class="text-danger">{{ $profile->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('permissions.create') }}">Nova permissão</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.permissions.create') }}">Nova permissão</a></li>
                                 <li class="breadcrumb-item active">Permissões</li>
                             </ol>
                         </div>
@@ -35,38 +35,47 @@
                                         Aqui você pode ver as permissões disponíveis
                                     </p>
                                 </div>
-
-                            <div class="col-6 ">
-                                <a href="{{ route('permissions.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo permissão</a>
-                            </div>
                             </div>
 
                             <div id="selection-datatable_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
 
                                 <div class="row">
                                     <div class="col-sm-12">
+                                            <form action="{{ route('admin.profiles.permissions.available', $profile->id) }}" class="ajax_off" method="POST" autocomplete="off">
+                                                @csrf
+                                                <div class="row">
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" name="filter" placeholder="Pesquisa aqui..">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-success">Filtrar</button>
+                                                </div>
+                                                    </div>
+                                            </form>
                                         <table class="table activate-select dt-responsive nowrap w-100" id="dataTablePlans">
                                             <thead>
                                             <tr>
-                                                <th align="left">Nome:</th>
+                                                <th align="left" width="30px">#</th>
 
-                                                <th align="center">Ações:</th>
+                                                <th align="center">Nome:</th>
+                                                <th align="center">Descrição:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <form action="" method="post">
+                                           <form action="{{ route('admin.profiles.permissions.attach', $profile->id) }}" method="POST">
                                                @csrf
                                                @if($permissions)
                                                    @foreach($permissions as $permission)
                                                        <tr class="odd">
                                                            <td class="sorting_1 dtr-control">
-                                                               <input type="text" name="permissions[]" value="{{ $permission->id }}" /></td>
+                                                               <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" /></td>
+                                                           <td>{{ $permission->name }}</td>
                                                            <td>{{ $permission->description }}</td>
                                                        </tr>
                                                    @endforeach
                                                    <tr>
                                                        <td>
-                                                           <input type="submit" class="btn btn-success" value="Cadastrar">
+                                                           <input type="submit" class="btn btn-success" value="Vincular ao perfil">
                                                        </td>
                                                    </tr>
                                                @endif

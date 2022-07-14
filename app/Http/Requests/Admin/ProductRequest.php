@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,16 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:categories,name,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:categories,name'),
-            'description' => 'required|min:3|max:10000'
+        $rules = [
+            'title' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:products,title,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:products,title'),
+            'price' => 'required',
+            'image' => 'required|image',
+            'description' => 'required|min:6|max:500',
         ];
+
+        if($this->method() == 'PUT'){
+            $rules['image'] = 'nullable|image';
+        }
+        return $rules;
     }
 }

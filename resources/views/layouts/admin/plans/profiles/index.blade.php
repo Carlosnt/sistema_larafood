@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões')
+@section('pageTitle', 'Perfil do plano '.$plan->name)
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões para o peril <b class="text-danger">{{ $profile->name }}</b></h4>
+                        <h4 class="mb-sm-0">Perfis do plano <b class="text-danger">{{ $plan->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('permissions.create') }}">Nova permissão</a></li>
-                                <li class="breadcrumb-item active">Permissões</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.plans.create') }}">Novo plano</a></li>
+                                <li class="breadcrumb-item active">Perfis</li>
                             </ol>
                         </div>
 
@@ -32,12 +32,12 @@
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar e deletar as permissões para <b class="text-danger">{{ $profile->name }}</b>
+                                        Aqui você pode cadastrar e deletar as permissões para <b class="text-danger">{{ $plan->name }}</b>
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('profiles.permissions.available',$profile->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add permissão</a>
+                                <a href="{{ route('admin.plans.profiles.available',$plan->id) }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Add perfil</a>
                             </div>
                             </div>
 
@@ -54,19 +54,19 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($permissions)
-                                                @foreach($permissions as $permission)
+                                            @if($profiles)
+                                                @foreach($profiles as $profile)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $permission->name }}</td>
-                                                        <td>{{ $permission->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $profile->name }}</td>
+                                                        <td>{{ $profile->description }}</td>
                                                         <td>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('profiles.permissions.detach', [$profile->id, $permission->id]) }}"
+                                                               data-url="{{ route('admin.plans.profiles.detach', [$plan->id, $profile->id]) }}"
                                                                data-method="POST"
-                                                               data-name="{{ $permission->name }}"
-                                                               data-id="{{ $permission->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
+                                                               data-name="{{ $profile->name }}"
+                                                               data-id="{{ $profile->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

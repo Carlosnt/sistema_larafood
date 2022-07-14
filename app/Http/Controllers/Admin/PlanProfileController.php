@@ -3,96 +3,96 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
+use App\Models\Plan;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 
-class ProfilePermissionController extends Controller
+class PlanProfileController extends Controller
 {
-    public function permissions($profile_id)
+    public function profiles($plan_id)
     {
-        $profile = Profile::with('permissions')->find($profile_id);
+        $plan = Plan::find($plan_id);
+
+        if(!$plan){
+            return redirect()->back();
+        }
+
+        $profiles = $plan->profiles()->get();
+
+        return view('layouts.admin.plans.profiles.index', [
+            'plan' => $plan,
+            'profiles' => $profiles
+        ]);
+    }
+
+    public function plans($profile_id)
+    {
+        $profile = Profile::find($profile_id);
 
         if(!$profile){
             return redirect()->back();
         }
 
-        $permissions = $profile->permissions;
+        $plans = $profile->plans()->get();
 
-        return view('layouts.admin.profiles.permissions.index', [
+        return view('layouts.admin.profiles.plans.plans', [
             'profile' => $profile,
-            'permissions' => $permissions
+            'plans' => $plans
         ]);
     }
 
-    public function profiles($permission_id)
+    public function profilesAvailable(Request $request, $plan)
     {
-        $permission = Permission::find($permission_id);
-
-        if(!$permission){
-            return redirect()->back();
-        }
-
-        $profiles = $permission->profiles()->get();
-
-        return view('layouts.admin.permissions.profiles.profiles', [
-            'profiles' => $profiles,
-            'permission' => $permission
-        ]);
-    }
-
-    public function permissionsAvailable(Request $request, $profile)
-    {
-        $profile = Profile::where('id',$profile)->first();
+        $plan = Plan::where('id',$plan)->first();
         $filters = $request->except('_token');
 
-        if(!$profile){
+        if(!$plan){
             return redirect()->back();
         }
 
-        $permissions = $profile->permissionsAvailable($request->filter);
-        return view('layouts.admin.profiles.permissions.available', [
-            'profile' => $profile,
-            'permissions' => $permissions,
+        $profiles = $plan->profilesAvailable($request->filter);
+        return view('layouts.admin.plans.profiles.available', [
+            'plan' => $plan,
+            'profiles' => $profiles,
             'filters' => $filters
         ]);
     }
 
-    public function attachPermissionsProfile(Request $request, $profile)
+    public function attachProfilesPlan(Request $request, $plan)
     {
-        $profile = Profile::where('id',$profile)->first();
-        if(!$profile){
+        $plan = Plan::where('id',$plan)->first();
+        if(!$plan){
             return redirect()->back();
         }
 
         $data = (object) $request->all();
-        if(!isset($data->permissions) || count($data->permissions) == 0){
-            $json['message'] = $this->message->warning("Selecione pelo menos uma permissão para fazer a vinculação")->render();
+        if(!isset($data->profiles) || count($data->profiles) == 0){
+            $json['message'] = $this->message->warning("Selecione pelo menos um plano para fazer a vinculação")->render();
             $json['reload'] = true;
             return response()->json($json);
         }else{
-            $profile->permissions()->attach($data->permissions);
-            $json['message'] = $this->message->success("Permissões adicionadas com sucesso")->render();
-            $json['redirect'] = route('profiles.permissions',$profile->id);
+            $plan->profiles()->attach($data->profiles);
+            $json['message'] = $this->message->success("Plano adicionado com sucesso")->render();
+            $json['redirect'] = route('admin.plans.profiles',$plan->id);
             return response()->json($json);
         }
 
     }
 
-    public function detachPermissionsProfile($profile, $permission)
+    public function detachProfilePlan($plan_id, $profile_id)
     {
-        $profile = Profile::find($profile);
-        $permission = Permission::find($permission);
+        $plan = Plan::find($plan_id);
+        $profile = Profile::find($profile_id);
 
-        if(!$profile || !$permission){
-            $json['message'] = $this->message->warning("Oppps! Perfil ou permissão não encontrado!")->render();
-            $json['redirect'] = route('profiles.permissions', $profile->id);
+        if(!$plan || !$profile){
+            $json['message'] = $this->message->warning("Oppps! Plano ou perfil não encontrado!")->render();
+            $json['redirect'] = route('admin.plans.profiles', $plan->id);
             return response()->json($json);
 
         }else{
-            $profile->permissions()->detach($permission);
-            $json['message'] = $this->message->success("Permissão do perfil {$profile->name} deletado com sucesso!")->render();
-            $json['redirect'] = route('profiles.permissions',$profile->id);
+            $plan->profiles()->detach($profile);
+            $json['message'] = $this->message->success("Perfil do plano {$plan->name} deletado com sucesso!")->render();
+            $json['redirect'] = route('admin.plans.profiles',$plan->id);
             return response()->json($json);
         }
     }

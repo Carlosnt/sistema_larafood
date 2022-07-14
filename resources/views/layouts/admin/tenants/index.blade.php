@@ -51,7 +51,7 @@
                                                 <th align="left">Imagem:</th>
                                                 <th align="left">Nome:</th>
                                                 <th align="center">Email:</th>
-                                                <th align="center">Empresa:</th>
+                                                <th align="center">CPF/CNPJ:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
@@ -59,10 +59,12 @@
                                             @if($tenants)
                                                 @foreach($tenants as $tenant)
                                                     <tr class="odd">
-                                                        <td><img class="d-flex me-3 rounded-circle img-thumbnail avatar-xs" src="{{ $tenant->url_image }}"></td>
-                                                        <td class="sorting_1 dtr-control">{{ $tenant->name }}</td>
+                                                        <td class="sorting_1 dtr-control">
+                                                            <img src="{{ $tenant->url_logo }}" class="d-flex me-3 rounded-circle img-thumbnail avatar-xs">
+                                                        </td>
+                                                        <td>{{ $tenant->company }}</td>
                                                         <td>{{ $tenant->email }}</td>
-                                                        <td>{{ $tenant->tenant->company }}</td>
+                                                        <td>{{ $tenant->document }}</td>
                                                         <td>
                                                             <a href="{{ route('admin.tenants.show', $tenant->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
                                                             <a href="{{ route('admin.tenants.edit',$tenant->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
@@ -71,7 +73,7 @@
                                                                data-bs-target="#deletePlan"
                                                                data-url="{{ route('admin.tenants.destroy', $tenant->id) }}"
                                                                data-method="DELETE"
-                                                               data-name="{{ $tenant->name }}"
+                                                               data-name="{{ $tenant->company }}"
                                                                data-id="{{ $tenant->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
@@ -143,11 +145,21 @@
                                     '</div>\n' +
                                     '<div id="form_delete_modal">\n' +
                                     '<div class="modal-body">\n' +
-                                    '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold">' + response.name + '</span></p>\n' +
+                                    '<p>Confira os detalhes do resgistro: <span id="name_modal" style="font-weight: bold"><h3>' + response.company + '</span></h3></p>\n' +
                                     '<ul>\n' +
-                                    '<li><b>Nome: </b>'+response.name+'</li>\n'+
+                                    '<li><b>Plano: </b>'+response.plan.name+'</li>\n'+
+                                    '<li><b>Nome: </b>'+response.company+'</li>\n'+
                                     '<li><b>E-mail: </b>'+response.email+'</li>\n'+
-                                    '<li><b>Último login: </b>'+response.last_login_at+'</li>\n'+
+                                    '<li><b>CPF/CNPJ: </b>'+response.document+'</li>\n'+
+                                    '<li><b>Ativo: </b>'+response.active+'</li>\n'+
+                                    '</ul>\n'+
+                                    '<div>\n'+
+                                    '<h3>Assinatura</h3>\n'+
+                                    '<ul>\n'+
+                                    '<li><b>Data de assinatura: </b>'+response.subscription+' </li>\n'+
+                                    '<li><b>Data expira: </b>'+response.expired_at+' </li>\n'+
+                                    '<li><b>Identificador: </b>'+response.subscription_id+' </li>\n'+
+                                    '<li><b>Ativo?: </b>'+response.active+' </li>\n'+
                                     '</ul>\n'+
                                     '</div>\n' +
 

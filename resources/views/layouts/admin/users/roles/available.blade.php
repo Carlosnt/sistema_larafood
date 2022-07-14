@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Permissões disponíveis '.$role->name)
+@section('pageTitle', 'Cargos disponíveis para '.$user->name)
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Permissões disponíveis para o cargo <b class="text-danger">{{ $role->name }}</b></h4>
+                        <h4 class="mb-sm-0">Cargos disponíveis para o cargo <b class="text-danger">{{ $user->name }}</b></h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.permissions.create') }}">Nova permissão</a></li>
-                                <li class="breadcrumb-item active">Permissões</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.create') }}">Novo Cargo</a></li>
+                                <li class="breadcrumb-item active">Cargos</li>
                             </ol>
                         </div>
 
@@ -28,11 +28,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de Permissões</h4>
+                            <h4 class="card-title">Gerênciamento de Cargos</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode ver as permissões disponíveis
+                                        Aqui você pode ver as Cargos disponíveis
                                     </p>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                            <form action="{{ route('admin.roles.permissions.available', $role->id) }}" class="ajax_off" method="POST" autocomplete="off">
+                                            <form action="{{ route('admin.users.roles.available', $user->id) }}" class="ajax_off" method="POST" autocomplete="off">
                                                 @csrf
                                                 <div class="row">
                                                 <div class="col-md-10">
@@ -62,20 +62,20 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <form action="{{ route('admin.roles.permissions.attach', $role->id) }}" method="POST">
+                                           <form action="{{ route('admin.users.roles.attach', $user->id) }}" method="POST">
                                                @csrf
-                                               @if($permissions)
-                                                   @foreach($permissions as $permission)
+                                               @if($roles)
+                                                   @foreach($roles as $role)
                                                        <tr class="odd">
                                                            <td class="sorting_1 dtr-control">
-                                                               <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" /></td>
-                                                           <td>{{ $permission->name }}</td>
-                                                           <td>{{ $permission->description }}</td>
+                                                               <input type="checkbox" name="roles[]" value="{{ $role->id }}" /></td>
+                                                           <td>{{ $role->name }}</td>
+                                                           <td>{{ $role->description }}</td>
                                                        </tr>
                                                    @endforeach
                                                    <tr>
                                                        <td>
-                                                           <input type="submit" class="btn btn-success" value="Vincular ao perfil">
+                                                           <input type="submit" class="btn btn-success" value="Vincular ao usuário">
                                                        </td>
                                                    </tr>
                                                @endif

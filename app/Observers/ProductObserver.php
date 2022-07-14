@@ -2,32 +2,31 @@
 
 namespace App\Observers;
 
-use App\Models\Tenant;
+use App\Models\Product;
 use Illuminate\Support\Str;
 
-class TenantObserver
+class ProductObserver
 {
     /**
-     * Handle the Tenant "created" event.
+     * Handle the Product "created" event.
      *
-     * @param  \App\Models\Tenant  $tenant
+     * @param  \App\Models\Product  $product
      * @return void
      */
-    public function creating(Tenant $tenant)
+    public function creating(Product $product)
     {
-        $tenant->uuid = Str::uuid();
-        $tenant->url = Str::slug($tenant->company);
+        $product->flag = Str::slug($product->title);
     }
 
     /**
-     * Handle the Tenant "updated" event.
+     * Handle the Product "updated" event.
      *
-     * @param  \App\Models\Tenant  $tenant
+     * @param  \App\Models\Product  $product
      * @return void
      */
-    public function updating(Tenant $tenant)
+    public function updating(Product $product)
     {
-        $tenant->url = Str::slug($tenant->company);
+        $product->flag = Str::slug($product->title);
     }
 
 

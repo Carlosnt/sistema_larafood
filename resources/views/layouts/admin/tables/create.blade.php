@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Dashboard - Nova categoria')
+@section('pageTitle', 'Dashboard - Nova mesa')
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Nova categoria</h4>
+                        <h4 class="mb-sm-0">Nova mesa</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.categories.index') }}">Categorias</a></li>
-                                <li class="breadcrumb-item active">Nova Categoria</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.tables.index') }}">Mesas</a></li>
+                                <li class="breadcrumb-item active">Nova mesa</li>
                             </ol>
                         </div>
 
@@ -26,18 +26,18 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Cadastrar uma nova categoria</h4>
+                            <h4 class="card-title">Cadastrar uma nova mesa</h4>
                             <p class="card-title-desc">Por favor, preencha todos os campos requiridos abaixo.</p>
-                            <form method="POST" action="{{ route('admin.categories.store') }}"
+                            <form method="POST" action="{{ route('admin.tables.store') }}"
                                   class="app_form" autocomplete="off">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Nome</label>
-                                            <input type="text" name="name" class="form-control" id="name"
-                                                   placeholder="Nome da categoria">
-                                            <span class="text-danger name_error"></span>
+                                            <label for="identify" class="form-label">Nome</label>
+                                            <input type="text" name="identify" class="form-control" id="identify"
+                                                   placeholder="Nome da mesa">
+                                            <span class="text-danger identify_error"></span>
                                         </div>
                                     </div>
                                 </div>

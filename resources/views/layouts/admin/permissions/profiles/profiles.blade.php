@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Perfis vinculados a permissão '.$perimission->name)
+@section('pageTitle', 'Perfis vinculados a permissão '.$permission->name)
 @section('content')
 
 
@@ -14,8 +14,8 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('permissions.create') }}">Nova permissão</a></li>
-                                <li class="breadcrumb-item active">Permissões</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.permissions.index') }}">Permissões</a></li>
+                                <li class="breadcrumb-item active">Perfis</li>
                             </ol>
                         </div>
 
@@ -45,27 +45,23 @@
                                             <thead>
                                             <tr>
                                                 <th align="left">Nome:</th>
-                                                <th align="center">Descrição:</th>
                                                 <th align="center">Ações:</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($permissions)
-                                                @foreach($permissions as $permission)
+                                            @if($profiles)
+                                                @foreach($profiles as $profile)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $permission->name }}</td>
-                                                        <td>{{ $permission->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $profile->name }}</td>
                                                         <td>
-                                                            <a href="{{ route('permissions.show',$permission->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
-                                                            <a href="{{ route('permissions.profiles',$permission->id) }}" class="btn btn-sm btn-success"><i class="ri-account-circle-line"></i> Perfis</a>
-                                                            <a href="{{ route('permissions.edit',$permission->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
-                                                            <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
+                                                            <a href="#" class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('permissions.delete', $permission->id) }}"
-                                                               data-method="DELETE"
-                                                               data-name="{{ $permission->name }}"
-                                                               data-id="{{ $permission->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
+                                                               data-url="{{ route('admin.profiles.permissions.detach', [$profile->id, $permission->id]) }}"
+                                                               data-method="POST"
+                                                               data-name="{{ $profile->name }}"
+                                                               data-id="{{ $profile->id }}"><i class="ri-delete-bin-5-line"></i> Desvincular</a>
+
                                                         </td>
                                                     </tr>
                                                 @endforeach

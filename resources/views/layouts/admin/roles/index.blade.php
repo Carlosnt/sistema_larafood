@@ -1,5 +1,5 @@
 @extends('layouts.admin.master.master')
-@section('pageTitle', 'Perfis')
+@section('pageTitle', 'Dashboard - Cargos')
 @section('content')
 
 
@@ -10,12 +10,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Perfis</h4>
+                        <h4 class="mb-sm-0">Cargos</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('admin.profiles.create') }}">novo perfil</a></li>
-                                <li class="breadcrumb-item active">Perfis</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin.roles.create') }}">Novo Cargo</a></li>
+                                <li class="breadcrumb-item active">Cargos</li>
                             </ol>
                         </div>
 
@@ -28,16 +28,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Gerênciamento de perfis</h4>
+                            <h4 class="card-title">Gerênciamento de Cargos</h4>
                             <div class="row mb-4">
                                 <div class="col-6">
                                     <p class="card-title-desc">
-                                        Aqui você pode cadastrar, editar e deletar os perfis do sistema
+                                        Aqui você pode cadastrar, editar e deletar os Cargos do sistema
                                     </p>
                                 </div>
 
                             <div class="col-6 ">
-                                <a href="{{ route('admin.profiles.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Novo perfil</a>
+                                <a href="{{ route('admin.roles.create') }}" class="btn btn-success float-end"><i class="fa fa-plus-circle"></i> Nova Cargo</a>
                             </div>
                             </div>
 
@@ -54,22 +54,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if($profiles)
-                                                @foreach($profiles as $profile)
+                                            @if($roles)
+                                                @foreach($roles as $role)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 dtr-control">{{ $profile->name }}</td>
-                                                        <td>{{ $profile->description }}</td>
+                                                        <td class="sorting_1 dtr-control">{{ $role->name }}</td>
+                                                        <td>{{ $role->description }}</td>
                                                         <td>
-                                                            <a href="{{ route('admin.profiles.show', $profile->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
-                                                            <a href="{{ route('admin.profiles.edit',$profile->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
-                                                            <a href="{{ route('admin.profiles.permissions',$profile->id) }}" class="btn btn-sm btn-success"><i class="ri-lock-2-fill"></i> Permissões</a>
+                                                            <a href="{{ route('admin.roles.show', $role->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.roles.edit',$role->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
+                                                            <a href="{{ route('admin.roles.permissions',$role->id) }}" class="btn btn-sm btn-success"><i class="ri-lock-2-fill"></i> Permissões</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deletePlan"
-                                                               data-url="{{ route('admin.profiles.delete', $profile->id) }}"
+                                                               data-url="{{ route('admin.roles.destroy', $role->id) }}"
                                                                data-method="DELETE"
-                                                               data-name="{{ $profile->name }}"
-                                                               data-id="{{ $profile->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
+                                                               data-name="{{ $role->name }}"
+                                                               data-id="{{ $role->id }}"><i class="ri-delete-bin-5-line"></i> Deletar</a>
                                                         </td>
                                                     </tr>
                                                 @endforeach

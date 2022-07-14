@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlanRequest extends FormRequest
+class DetailsPlanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class PlanRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => (!empty($this->request->all()['id']) ? 'required|unique:plans,name,' . $this->request->all()['id'] : 'required|unique:plans,name'),
-            'price' => 'required',
+            'name' => (!empty($this->request->all()['id']) ? 'required|unique:detail_plans,name,' . $this->request->all()['id'] : 'required|unique:detail_plans,name'),
         ];
     }
 }
