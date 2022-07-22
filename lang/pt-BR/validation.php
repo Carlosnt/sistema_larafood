@@ -243,6 +243,7 @@ return [
         'area_util' => 'área útil',
         'price' => 'preço',
         'identify' => 'identificador',
+        'token_company' => 'token da empresa',
     ],
 
 ];

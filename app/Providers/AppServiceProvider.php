@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Api\TenantApiController;
 use App\Models\Product;
+use App\Repositories\Contracts\TenantRepositoryInterface;
+use App\Repositories\TenantRepository;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Tenant;
@@ -18,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**
