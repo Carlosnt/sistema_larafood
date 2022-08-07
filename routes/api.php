@@ -6,6 +6,15 @@ use App\Http\Controllers\Api\TenantApiController;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\TableApiController;
 use App\Http\Controllers\Api\ProductApiController;
+use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Auth\AuthClientController;
+
+Route::post('/sanctum/token', [AuthClientController::class, 'auth']);
+Route::group(['middleware' => ['auth:sanctum']
+    ], function (){
+    Route::get('/auth/me', [AuthClientController::class, 'me']);
+});
+
 
 Route::group([
     'prefix' => 'v1',
@@ -22,6 +31,9 @@ Route::group([
 
     Route::get('/products/{flag}', [ProductApiController::class, 'show']);
     Route::get('/products', [ProductApiController::class, 'productsByTenant']);
+
+    Route::post('/client', [RegisterController::class, 'store']);
+
 });
 
 
