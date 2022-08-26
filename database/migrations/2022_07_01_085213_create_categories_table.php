@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tenant_id');
+            $table->uuid('uuid');
             $table->string('name')->unique();
             $table->string('url')->unique()->nullable();
             $table->text('description');

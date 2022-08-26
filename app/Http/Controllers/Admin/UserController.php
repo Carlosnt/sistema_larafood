@@ -112,8 +112,10 @@ class UserController extends Controller
     {
         $userUpdate = User::tenantUser()->where("id", $id)->first();
 
-        if(!empty($request->hasFile('image'))){
-            Storage::delete($userUpdate->image);
+        if(!empty($request->hasFile('image'))) {
+            if ($userUpdate->image != null) {
+                Storage::delete($userUpdate->image);
+            }
             Cropper::flush($userUpdate->image);
             $userUpdate->image = '';
             $userUpdate->image = $request->file('image')->storeAs("users", Str::slug($request->name)  . '-' . str_replace('.', '', microtime(true)) . '.' . $request->file('image')->extension());

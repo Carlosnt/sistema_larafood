@@ -33,6 +33,14 @@ class AuthClientController extends Controller
     public function me(Request $request)
     {
         $client = $request->user();
+
         return new ClientResource($client);
+    }
+
+    public function logout(Request $request)
+    {
+        $client = $request->user();
+        $client->tokens()->delete();
+        return response()->json(['message' => 'Volte logo '.$client->name],204);
     }
 }

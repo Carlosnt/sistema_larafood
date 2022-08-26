@@ -1,6 +1,7 @@
 @extends('auth.master.master')
 @section('pageTitle', 'Login')
 @section('content')
+
     <div class="container-fluid p-0">
         <div class="card">
             <div class="card-body">

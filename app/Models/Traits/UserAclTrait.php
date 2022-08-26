@@ -13,10 +13,9 @@ trait UserAclTrait
         $permissionsRole = $this->permissionsRole();
 
         $permissions = [];
-        foreach ($permissionsRole as $permission){
-            if(in_array($permission, $permissionsPlan)){
+        foreach ($permissionsRole as $permission) {
+            if (in_array($permission, $permissionsPlan))
                 array_push($permissions, $permission);
-            }
         }
 
         return $permissions;
@@ -24,19 +23,16 @@ trait UserAclTrait
 
     public function permissionsPlan(): array
     {
-        $tenant = Tenant::with('plan.profiles.permissions')
-            ->where('id', $this->tenant_id)
-            ->first();
-
+        $tenant = Tenant::with('plan.profiles.permissions')->where('id', $this->tenant_id)->first();
         $plan = $tenant->plan;
 
-
         $permissions = [];
-        foreach ($plan->profiles as $profile ){
-            foreach ($profile->permissions as $permission){
+        foreach ($plan->profiles as $profile) {
+            foreach ($profile->permissions as $permission) {
                 array_push($permissions, $permission->name);
             }
         }
+
         return $permissions;
     }
 
@@ -50,6 +46,7 @@ trait UserAclTrait
                 array_push($permissions, $permission->name);
             }
         }
+
         return $permissions;
     }
 
@@ -62,6 +59,7 @@ trait UserAclTrait
     {
         return in_array($this->email, config('acl.admins'));
     }
+
     public function isTenant(): bool
     {
         return !in_array($this->email, config('acl.admins'));

@@ -29,6 +29,4 @@ class TenantObserver
     {
         $tenant->url = Str::slug($tenant->company);
     }
-
-
 }
