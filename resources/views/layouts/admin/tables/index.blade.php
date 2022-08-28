@@ -63,6 +63,7 @@
                                                         <td>{{ $table->tenant->company }}</td>
                                                         <td>
                                                             <a href="{{ route('admin.tables.show', $table->id) }}" data-method="GET" data-bs-toggle="modal" data-bs-target=".bs-example-modal-lg" class="btn btn-sm btn-info j_info_modal"><i class="ri-file-search-line"></i> Detalhes</a>
+                                                            <a href="{{ route('admin.tables.qrcode', $table->identify) }}" target="_blank"  class="btn btn-sm btn-success"><i class="ri-qr-code-line"></i> Qrcode</a>
                                                             <a href="{{ route('admin.tables.edit',$table->id) }}" class="btn btn-sm btn-warning"><i class="ri-edit-line"></i> Editar</a>
                                                             <a href="#"  class="btn btn-sm btn-danger j_delete_modal"
                                                                data-bs-toggle="modal"

@@ -132,7 +132,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('categories/{id}/products', [CategoryProductController::class, 'products'])->name('categories.plans');
 
         /** Mesas */
+        Route::get('tables/qrcode/{identify}', [TableController::class, "qrcode"])->name('tables.qrcode');
         Route::resource('tables', TableController::class);
+
+
+
 
     });
 

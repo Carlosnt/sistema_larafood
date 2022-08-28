@@ -71,6 +71,30 @@ class TableController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function qrcode($identify)
+    {
+        $table = Table::where('identify', $identify)->first();
+
+        if(empty($table)){
+            return redirect()->back();
+        }
+
+        $tenant = auth()->user()->tenant;
+
+        $uri = env('URI_CLIENT')."/{$tenant->uuid}/{$table->uuid}";
+
+        return view('layouts.admin.tables.qrcode',[
+            'uri' => $uri
+        ]);
+    }
+
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param int $id
