@@ -9,12 +9,15 @@ use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\AuthClientController;
 use App\Http\Controllers\Api\OrderApiController;
+use App\Http\Controllers\Api\EvaluationApiController;
 
 Route::post('/sanctum/token', [AuthClientController::class, 'auth']);
 Route::group(['middleware' => ['auth:sanctum']
     ], function (){
     Route::get('/auth/me', [AuthClientController::class, 'me']);
     Route::post('/auth/logout', [AuthClientController::class, 'logout']);
+
+    Route::post('/auth/v1/orders/{identifyOrder}/evaluations', [EvaluationApiController::class, 'store']);
 
     Route::get('/auth/v1/my-orders', [OrderApiController::class, 'myorders']);
     Route::post('/auth/v1/orders', [OrderApiController::class, 'store']);

@@ -29,9 +29,16 @@ class EvaluationRepository implements EvaluationRepositoryInterface
      * @param int $clientId
      * @return \Illuminate\Support\Collection
      */
-    public function newEvaluationOrder(int $orderId, int $clientId)
+    public function newEvaluationOrder(int $orderId, int $clientId, array $evaluation)
     {
+        $data = [
+            'client_id' => $clientId,
+            'order_id' => $orderId,
+            'stars' => $evaluation['stars'],
+            'comment' => $evaluation['comment'] ?? null,
+        ];
 
+        return $this->entity->create($data);
     }
 
     /**
@@ -40,7 +47,7 @@ class EvaluationRepository implements EvaluationRepositoryInterface
      */
     public function getEvaluationByOrder(int $orderId)
     {
-
+        return $this->entity->where('order_id', $orderId)->get();
     }
 
     /**
@@ -49,7 +56,19 @@ class EvaluationRepository implements EvaluationRepositoryInterface
      */
     public function getEvaluationByClient(int $clientId)
     {
-
+        return $this->entity->where('client_id', $clientId)->get();
     }
 
+    public function getEvaluationById(int $id)
+    {
+        return $this->entity->find($id);
+    }
+
+    public function getEvaluationByClientIdByOrderId(int $orderId, int $clientId)
+    {
+        return $this->entity
+            ->where('client_id', $clientId)
+            ->where('order_id', $orderId)
+            ->first();
+    }
 }

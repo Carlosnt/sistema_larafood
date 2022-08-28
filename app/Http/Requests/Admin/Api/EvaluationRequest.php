@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Admin\Api;
 
+use App\Repositories\Contracts\OrderRepositoryInterface;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderRequest extends FormRequest
+class EvaluationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,14 @@ class OrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+       if(!$client = auth()->user()){
+           return false;
+       }
+
+       if(!$order = app(OrderRepositoryInterface::class)->getOrderByIdentify($this->identifyOrder)){
+           return false;
+       }
+        return $client->id == $order->client_id;
     }
 
     /**
@@ -24,22 +32,9 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'token_company' => [
-                'required',
-                'exists:tenants,uuid'
-            ],
-            'table' => [
-                'nullable',
-                'exists:tables,uuid'
-            ],
-            'comment' => [
-                'nullable',
-                'max:1000'
-            ],
-            'products' => ['required'],
-            'products.*.identify' => ['required', 'exists:products,uuid'],
-            'products.*.qty' => ['required', 'integer'],
-
+            'stars' => ['required', 'integer', 'min:1','max:5'],
+            'comment' => ['nullable', 'min:3','max:1000'],
         ];
+
     }
 }
