@@ -11,7 +11,7 @@ class Seo
     {
         $this->optimizer = new Optimizer();
         $this->optimizer->openGraph(
-            env('APP_NAME'),
+            env('APP_NAME') ?? "No Prato",
             'pt_BR',
             'article'
         )->twitterCard(

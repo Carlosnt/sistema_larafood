@@ -122,7 +122,7 @@ class CategoryController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $deleted = Category::where('id', $id)->first();
 
@@ -139,17 +139,5 @@ class CategoryController extends Controller
             $json['redirect'] = route('admin.plans.index');
             return response()->json($json);
         }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

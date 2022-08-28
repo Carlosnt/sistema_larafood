@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Tenant\Rules\UniqueTenant;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryRequest extends FormRequest
@@ -24,7 +25,13 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:categories,name,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:categories,name'),
+            //'name' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:categories,name,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:categories,name'),
+            "name" =>[
+                'required',
+                'min:3',
+                'max:255',
+                new UniqueTenant('categories', (!empty($this->request->all()['id']) ?? "")),
+            ],
             'description' => 'required|min:3|max:10000'
         ];
     }

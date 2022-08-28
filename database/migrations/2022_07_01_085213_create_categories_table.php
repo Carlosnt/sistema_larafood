@@ -17,8 +17,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tenant_id');
             $table->uuid('uuid');
-            $table->string('name')->unique();
-            $table->string('url')->unique()->nullable();
+            $table->string('name');
+            $table->string('url')->nullable();
             $table->text('description');
             $table->timestamps();
 

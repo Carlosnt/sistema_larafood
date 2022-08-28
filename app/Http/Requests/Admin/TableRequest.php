@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Tenant\Rules\UniqueTenant;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TableRequest extends FormRequest
@@ -24,7 +25,13 @@ class TableRequest extends FormRequest
     public function rules()
     {
         return [
-            'identify' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:tables,identify,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:tables,identify'),
+            //'identify' => (!empty($this->request->all()['id']) ? 'required|min:3|max:255|unique:tables,identify,' . $this->request->all()['id'] : 'required|min:3|max:255|unique:tables,identify'),
+            'identify' => [
+                'required',
+                'min:3',
+                '|max:255',
+                new UniqueTenant('tables', (!empty($this->request->all()['id']) ?? "")),
+            ],
             'description' => 'required|min:3|max:191'
         ];
     }
