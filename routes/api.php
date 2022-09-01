@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\Auth\AuthClientController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\EvaluationApiController;
 
+Route::get('/', function (){
+    return respose()->json(['message' => 'ok']);
+});
 Route::post('/sanctum/token', [AuthClientController::class, 'auth']);
 Route::group(['middleware' => ['auth:sanctum']
     ], function (){

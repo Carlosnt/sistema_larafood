@@ -19,6 +19,13 @@ class Order extends Model
         'client_id',
         'table_id',
     ];
+    public $statusOptions = [
+        'open' => 'Aberto',
+        'done' => 'Completo',
+        'rejected' => 'Rejeitado',
+        'working' => 'Andamento',
+        'delivering' => 'Em transito',
+    ];
 
     public function tenant()
     {

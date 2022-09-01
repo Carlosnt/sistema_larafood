@@ -12,7 +12,7 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Upcube</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">{{ env('APP_NAME') }}</a></li>
                                 <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div>
@@ -21,51 +21,35 @@
                 </div>
             </div>
             <!-- end page title -->
-
+            @admin
             <div class="row">
                 <div class="col-xl-3 col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <p class="text-truncate font-size-14 mb-2">Total Sales</p>
-                                    <h4 class="mb-2">1452</h4>
+                                    <p class="text-truncate font-size-14 mb-2">Planos</p>
+                                    <h4 class="mb-2">{{ $plans }}</h4>
                                     <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>9.23%</span>from previous period</p>
                                 </div>
                                 <div class="avatar-sm">
                                                 <span class="avatar-title bg-light text-primary rounded-3">
-                                                    <i class="ri-shopping-cart-2-line font-size-24"></i>
+                                                    <i class="ri-calendar-2-line font-size-24"></i>
                                                 </span>
                                 </div>
                             </div>
                         </div><!-- end cardbody -->
                     </div><!-- end card -->
                 </div><!-- end col -->
+                @endadmin
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <p class="text-truncate font-size-14 mb-2">New Orders</p>
-                                    <h4 class="mb-2">938</h4>
-                                    <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i>1.09%</span>from previous period</p>
-                                </div>
-                                <div class="avatar-sm">
-                                                <span class="avatar-title bg-light text-success rounded-3">
-                                                    <i class="mdi mdi-currency-usd font-size-24"></i>
-                                                </span>
-                                </div>
-                            </div>
-                        </div><!-- end cardbody -->
-                    </div><!-- end card -->
-                </div><!-- end col -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="flex-grow-1">
-                                    <p class="text-truncate font-size-14 mb-2">New Users</p>
-                                    <h4 class="mb-2">8246</h4>
+                                    <p class="text-truncate font-size-14 mb-2">Usuários</p>
+                                    <h4 class="mb-2"> {{ $users }}</h4>
                                     <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>16.2%</span>from previous period</p>
                                 </div>
                                 <div class="avatar-sm">
@@ -77,18 +61,116 @@
                         </div><!-- end cardbody -->
                     </div><!-- end card -->
                 </div><!-- end col -->
+
+                @admin
                 <div class="col-xl-3 col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <p class="text-truncate font-size-14 mb-2">Unique Visitors</p>
-                                    <h4 class="mb-2">29670</h4>
+                                    <p class="text-truncate font-size-14 mb-2">Empresas</p>
+                                    <h4 class="mb-2"> {{ $companies }}</h4>
+                                    <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>16.2%</span>from previous period</p>
+                                </div>
+                                <div class="avatar-sm">
+                                                <span class="avatar-title bg-light text-primary rounded-3">
+                                                    <i class="ri-database-line font-size-24"></i>
+                                                </span>
+                                </div>
+                            </div>
+                        </div><!-- end cardbody -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+                @endadmin
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-truncate font-size-14 mb-2">Perfis</p>
+                                    <h4 class="mb-2"> {{ $profiles }}</h4>
+                                    <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>16.2%</span>from previous period</p>
+                                </div>
+                                <div class="avatar-sm">
+                                                <span class="avatar-title bg-light text-primary rounded-3">
+                                                    <i class="ri-account-circle-line font-size-24"></i>
+                                                </span>
+                                </div>
+                            </div>
+                        </div><!-- end cardbody -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-truncate font-size-14 mb-2">Categorias</p>
+                                    <h4 class="mb-2"> {{ $categories }}</h4>
+                                    <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>16.2%</span>from previous period</p>
+                                </div>
+                                <div class="avatar-sm">
+                                                <span class="avatar-title bg-light text-primary rounded-3">
+                                                    <i class="ri-price-tag-3-line font-size-24"></i>
+                                                </span>
+                                </div>
+                            </div>
+                        </div><!-- end cardbody -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-truncate font-size-14 mb-2">Produtos</p>
+                                    <h4 class="mb-2">{{ $products }}</h4>
+                                    <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>9.23%</span>from previous period</p>
+                                </div>
+                                <div class="avatar-sm">
+                                                <span class="avatar-title bg-light text-primary rounded-3">
+                                                    <i class="ri-inbox-archive-line font-size-24"></i>
+                                                </span>
+                                </div>
+                            </div>
+                        </div><!-- end cardbody -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-truncate font-size-14 mb-2">Mesas</p>
+                                    <h4 class="mb-2">{{ $tables }}</h4>
+                                    <p class="text-muted mb-0"><span class="text-danger fw-bold font-size-12 me-2"><i class="ri-arrow-right-down-line me-1 align-middle"></i>1.09%</span>from previous period</p>
+                                </div>
+                                <div class="avatar-sm">
+                                                <span class="avatar-title bg-light text-success rounded-3">
+                                                    <i class="ri-command-fill font-size-24"></i>
+                                                </span>
+                                </div>
+                            </div>
+                        </div><!-- end cardbody -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-truncate font-size-14 mb-2">Pedidos de hoje</p>
+                                    <h4 class="mb-2">{{ $orders }}</h4>
                                     <p class="text-muted mb-0"><span class="text-success fw-bold font-size-12 me-2"><i class="ri-arrow-right-up-line me-1 align-middle"></i>11.7%</span>from previous period</p>
                                 </div>
                                 <div class="avatar-sm">
                                                 <span class="avatar-title bg-light text-success rounded-3">
-                                                    <i class="mdi mdi-currency-btc font-size-24"></i>
+                                                    <i class="ri-shopping-cart-2-line font-size-24"></i>
                                                 </span>
                                 </div>
                             </div>

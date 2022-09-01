@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\CategoryProductController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TenantController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Web\WebController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\TableController;
@@ -52,6 +53,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     /** Rotas Protegidas */
     Route::group(['middleware' => ['auth']], function () {
         Route::get('home', [HomeController::class, 'index'])->name('home');
+        /** Orders */
+        Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
         /** Usuários */
         Route::resource('users', UserController::class);
 

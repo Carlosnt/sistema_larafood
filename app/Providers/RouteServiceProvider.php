@@ -36,6 +36,8 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
+
+        $this->mapAuthApiRoutes();
     }
 
     /**
@@ -48,5 +50,18 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+    }
+
+    /**
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapAuthApiRoutes()
+    {
+        Route::prefix('api')
+            ->middleware(['web','api'])
+            ->namespace($this->namespace)
+            ->group(base_path('routes/auth_api.php'));
     }
 }

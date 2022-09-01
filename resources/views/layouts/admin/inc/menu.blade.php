@@ -140,14 +140,14 @@
                 @if(Auth::user()->isAdmin())
                     <li>
                         <a href="{{ route('admin.products.index') }}" class=" waves-effect">
-                            <i class=" ri-inbox-archive-line"></i>
+                            <i class="ri-inbox-archive-line"></i>
                             <span>Produtos</span>
                         </a>
                     </li>
                 @elseif(auth()->user()->hasPermission('products'))
                 <li>
                     <a href="{{ route('admin.products.index') }}" class=" waves-effect">
-                        <i class=" ri-inbox-archive-line"></i>
+                        <i class="ri-inbox-archive-line"></i>
                         <span>Produtos</span>
                     </a>
                 </li>
@@ -156,17 +156,33 @@
                 @if(Auth::user()->isAdmin())
                     <li>
                         <a href="{{ route('admin.tables.index') }}" class=" waves-effect">
-                            <i class=" ri-inbox-archive-line"></i>
+                            <i class="ri-command-fill"></i>
                             <span>Mesas</span>
                         </a>
                     </li>
                 @elseif(auth()->user()->hasPermission('tables'))
                 <li>
                     <a href="{{ route('admin.tables.index') }}" class=" waves-effect">
-                        <i class=" ri-inbox-archive-line"></i>
+                        <i class="ri-inbox-archive-line"></i>
                         <span>Mesas</span>
                     </a>
                 </li>
+                @endif
+
+                @if(Auth::user()->isAdmin())
+                    <li>
+                        <a href="{{ route('admin.orders.index') }}" class=" waves-effect">
+                            <i class="ri-shopping-cart-2-line"></i>
+                            <span>Pedidos</span>
+                        </a>
+                    </li>
+                @elseif(auth()->user()->hasPermission('orders'))
+                    <li>
+                        <a href="{{ route('admin.orders.index') }}" class=" waves-effect">
+                            <i class="ri-shopping-cart-2-line"></i>
+                            <span>Pedidos</span>
+                        </a>
+                    </li>
                 @endif
 
 

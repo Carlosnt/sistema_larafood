@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\OrderCreate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Api\OrderRequest;
 use App\Http\Requests\Admin\Api\TenantFormRequest;
@@ -22,6 +23,8 @@ class OrderApiController extends Controller
     public function store(OrderRequest $request)
     {
         $order = $this->orderService->createNewOrder($request->all());
+
+        broadcast(new OrderCreated($order));
 
         return new OrderResource($order);
     }

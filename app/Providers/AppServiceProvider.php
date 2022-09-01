@@ -12,6 +12,7 @@ use App\Observers\ClientObserver;
 use App\Observers\TableObserver;
 use App\Repositories\Contracts\TenantRepositoryInterface;
 use App\Repositories\TenantRepository;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Tenant;
@@ -45,5 +46,13 @@ class AppServiceProvider extends ServiceProvider
        Table::observe(TableObserver::class);
        Product::observe(ProductObserver::class);
 
+       /**
+        * Custom if Statements
+        */
+       Blade::if('admin', function (){
+           $user = auth()->user();
+
+           return $user->isAdmin();
+       });
     }
 }
