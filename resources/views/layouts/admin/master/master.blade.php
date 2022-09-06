@@ -33,6 +33,7 @@
     <!-- App Css-->
     <link href="{{ url('backend/assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link href="{{ url('backend/assets/css/style.css') }}"  rel="stylesheet" type="text/css" />
+    @stack('scripts-header')
     @hasSection('css')
         @yield('css')
     @endif

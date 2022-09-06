@@ -41,20 +41,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.do');
 
-
-// Password Reset Routes...
+    // Password Reset Routes...
     Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     // Auth::routes();
 
-    /** Planos */
     /** Rotas Protegidas */
     Route::group(['middleware' => ['auth']], function () {
+        /** Home */
         Route::get('home', [HomeController::class, 'index'])->name('home');
+
         /** Orders */
         Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+
         /** Usuários */
         Route::resource('users', UserController::class);
 
@@ -69,8 +70,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         /** Tenants */
         Route::resource('tenants', TenantController::class);
-        /** Planos */
-        Route::resource('plans', PlanController::class);
 
         /** Detalhes dos planos */
         Route::delete('plans/delete/{plan}', [PlanController::class, 'delete'])->name('plans.delete');
@@ -82,12 +81,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('plans/{url}/details/{id}/edit', [DetailPlanController::class, 'edit'])->name('details.plan.edit');
         Route::delete('plans/{url}/details/delete/{id}', [DetailPlanController::class, 'delete'])->name('details.plan.delete');
 
-        /** Perfis */
-//      Route::any('admin/profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
-        Route::resource('profiles', ProfileController::class);
-        /** Cargos */
-//      Route::any('admin/profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
-        Route::resource('roles', RoleController::class);
+        /** Planos */
+        Route::resource('plans', PlanController::class);
+
         /** Permissões x Roles */
         Route::delete('roles/delete/{id}', [PermissionRoleController::class, 'delete'])->name('roles.delete');
         Route::post('roles/{id}/permission/{idPermission}/detach', [PermissionRoleController::class, 'detachPermissionsRole'])->name('roles.permissions.detach');
@@ -96,6 +92,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::any('roles/{id}/permissions/create', [PermissionRoleController::class, 'permissionsAvailable'])->name('roles.permissions.available');
         Route::get('roles/{id}/permissions', [PermissionRoleController::class, 'permissions'])->name('roles.permissions');
         Route::get('permissions/{id}/role', [PermissionRoleController::class, 'roles'])->name('permissions.roles');
+
+        /** Perfis */
+//      Route::any('admin/profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
+        Route::resource('profiles', ProfileController::class);
+        /** Cargos */
+//      Route::any('admin/profiles/search', [ProfileController::class, 'search'])->name('profiles.search');
+        Route::resource('roles', RoleController::class);
 
         /** Permissões x Perfis */
         Route::delete('profiles/delete/{id}', [ProfileController::class, 'delete'])->name('profiles.delete');
@@ -137,10 +140,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         /** Mesas */
         Route::get('tables/qrcode/{identify}', [TableController::class, "qrcode"])->name('tables.qrcode');
         Route::resource('tables', TableController::class);
-
-
-
-
     });
 
     /** Logout */

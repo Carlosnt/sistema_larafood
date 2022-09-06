@@ -1,22 +1,31 @@
 <template>
     <div>
         <div class="card-header">
+
             <form action="#" method="POST" class="form form-inline">
-                <label for="status">Status:</label>
-                <select name="status" class="form-control" v-model="status">
-                    <option value="all">Todos</option>
-                    <option value="open">Aberto</option>
-                    <option value="done">Completo</option>
-                    <option value="rejected">Rejeitados</option>
-                    <option value="working">Andamento</option>
-                    <option value="canceled">Cancelado</option>
-                    <option value="delivering">Em transito</option>
-                </select> |
-                <div class="form-group">
-                    <label for="date">Data:</label>
-                    <input type="date" class="form-control" v-model="dateFilter">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="status">Status:</label>
+                        <select name="status" class="form-control" v-model="status">
+                            <option value="all">Todos</option>
+                            <option value="open">Aberto</option>
+                            <option value="done">Completo</option>
+                            <option value="rejected">Rejeitados</option>
+                            <option value="working">Andamento</option>
+                            <option value="canceled">Cancelado</option>
+                            <option value="delivering">Em transito</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="date">Data:</label>
+                            <input type="date" class="form-control" v-model="dateFilter">
+                        </div>
+                    </div>
                 </div>
             </form>
+
         </div>
         <div class="card-body">
             <table class="table table-condensed">

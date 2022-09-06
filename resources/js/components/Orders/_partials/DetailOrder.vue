@@ -18,7 +18,7 @@
                             <option value="working">Andamento</option>
                             <option value="canceled">Cancelado</option>
                             <option value="delivering">Em transito</option>
-                        </select> |
+                        </select>
                         <button type="submit" class="btn btn-info" :disabled="loading">
                             Atualizar Status
                         </button>
