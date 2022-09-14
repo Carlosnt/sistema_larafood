@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Profile;
 use App\Models\Table;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -32,10 +33,11 @@ class HomeController extends Controller
     public function index()
     {
         $tenant = auth()->user()->tenant;
-
-        $orders = Order::where("created_at",'getdate()')
-                        ->where('tenant_id', $tenant->id)
+        $dateNow = Carbon::now()->format('Y-m-d');
+        $orders = Order::where('tenant_id', $tenant->id)
+                        ->where("created_at", $dateNow)
                         ->count();
+
         $users = User::where('tenant_id', $tenant->id)->count();
         $tables = Table::count();
         $categories = Category::count();

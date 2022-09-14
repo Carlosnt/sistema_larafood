@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         /** Orders */
         Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::post('orders', [OrderController::class, 'index'])->name('orders.index');
 
         /** Usuários */
         Route::resource('users', UserController::class);

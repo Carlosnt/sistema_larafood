@@ -1,4 +1,4 @@
-import './bootstrap';
+require('./bootstrap');
 
 window.Vue = require('vue').default;
 import VueToastify from "vue-toastify";
