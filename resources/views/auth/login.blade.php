@@ -19,7 +19,7 @@
 
                 <div class="p-3">
                     <form class="form-horizontal mt-3" action="{{ route('admin.login.do') }}" method="POST" name="login" autocomplete="off">
-                        @csrf
+                       @csrf
                         <div class="form-group mb-3 row">
                             <div class="col-12">
                                 <input class="form-control @error('email') is-invalid @enderror" value="carlosnt135@hotmail.com" name="email" type="email" placeholder="{{ __('Email') }}">
@@ -58,6 +58,7 @@
         </div>
         <!-- end card -->
     </div>
+
 @endsection
 @section('js')
     <script>
@@ -69,12 +70,15 @@
             });
 
             var ajaxResponseBaseTime = 3;
+            var ajaxResponseRequestError = "<div class='message error icon-warning'>Desculpe mas não foi possível processar sua requisição...</div>";
 
             //Login
             $('form[name="login"]').on('submit',function (event) {
                 event.preventDefault();
+                alert($('meta[name="csrf-token"]').attr('content'));
                 var form = $(this);
                 var load = $(".ajax_load");
+
                 form.ajaxSubmit({
                     url: form.attr("action"),
                     type: "POST",
@@ -160,6 +164,8 @@
                 $(this).effect("bounce").fadeOut(1);
             });
         });
-
+        export default {
+            components: {Index}
+        }
     </script>
 @endsection

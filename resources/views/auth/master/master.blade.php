@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Scripts -->
 
     <title>@yield('pageTitle')</title>
@@ -62,7 +62,6 @@
 <script src="{{ asset('backend/assets/libs/simplebar/simplebar.min.js') }}"></script>
 <script src="{{ asset('backend/assets/libs/node-waves/waves.min.js') }}"></script>
 
-
 <!-- apexcharts -->
 <script src="{{ asset('backend/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
@@ -85,6 +84,7 @@
 <!-- App js -->
 <script src="{{ asset('backend/assets/js/app.js') }}"></script>
 <script src="{{ asset('backend/assets/js/jquery.form.js') }}"></script>
+
 <script src="{{ asset('backend/assets/js/jquery.mask.js') }}"></script>
 
 @hasSection('js')
